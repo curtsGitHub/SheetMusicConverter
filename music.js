@@ -1,4 +1,4 @@
 let button = document.getElementById("submit");
 button.addEventListener('click', function(){
-    openNewPage
+    window.location.href = "PrintingPage.html";
 })
