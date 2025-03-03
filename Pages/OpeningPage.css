@@ -1,0 +1,26 @@
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+body {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: large;
+    color: rgb(38, 37, 37);
+}
+#submit {
+    font-family:'Courier New', Courier, monospace;
+    font-size: large;
+}
+#submitButton {
+    display: flex;
+    justify-content: center;
+}
+#fileButton {
+    display: flex;
+    justify-content: center;
+}
+#sheetMusic {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: large;
+}
