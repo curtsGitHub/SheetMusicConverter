@@ -1,7 +1,7 @@
 h1 {
     display: flex;
     justify-content: center;
-    align-items: center;
+    margin-top: 400px;
 }
 body {
     font-family: 'Courier New', Courier, monospace;
@@ -19,8 +19,14 @@ body {
 #fileButton {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 #sheetMusic {
+    display: none;
+}
+
+#addFile {
+    
     font-family: 'Courier New', Courier, monospace;
     font-size: large;
 }

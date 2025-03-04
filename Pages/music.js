@@ -1,6 +1,6 @@
 let button = document.getElementById("submit");
 let file = document.getElementById("sheetMusic");
-
+let addFileButton = document.getElementById("addFile");
 
 //let file = document.getElementById("sheetMusic");
 //const file = document.getElementById("sheetMusic").files[0];
@@ -10,6 +10,9 @@ let file = document.getElementById("sheetMusic");
 //     console.log(new FileReader(file).readAsText);
 // })
 
+addFileButton.addEventListener('click', function() {
+  file.click();
+})
 file.addEventListener('change', (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
