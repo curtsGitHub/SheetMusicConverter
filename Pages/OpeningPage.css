@@ -1,7 +1,11 @@
-h1 {
+#logo {
     display: flex;
     justify-content: center;
-    margin-top: 400px;
+
+}
+img {
+    margin-top: 50px;
+    margin-bottom: 20px;
 }
 body {
     font-family: 'Courier New', Courier, monospace;
