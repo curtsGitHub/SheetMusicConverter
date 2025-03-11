@@ -14,19 +14,20 @@ addFileButton.addEventListener('click', function() {
   file.click();
 })
 file.addEventListener('change', (event) => {
-    const file = event.target.files[0];
+    file = event.target.files[0];
     const reader = new FileReader();
   
     reader.onload = (e) => {
       const fileContent = e.target.result;
       // Process fileContent here
+      sessionStorage.setItem("file", fileContent);
       console.log(fileContent);
     };
   
     reader.onerror = (e) => {
       console.error('Error reading file:', e);
     };
-  
+    
     reader.readAsText(file); // or readAsArrayBuffer, readAsDataURL
   });
 
@@ -36,3 +37,7 @@ function readXML(file) {
     reader.readAsDataURL(file);
     console.log(reader.readAsDataURL(file));
   }
+
+function getFile() {
+  return file;
+}
