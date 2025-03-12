@@ -1,0 +1,16 @@
+h1 {
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+h2 {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: smaller;
+}
+#Title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -40px;
+}
+#Composer {
+    display: flex;
+    justify-content: center;
+}
