@@ -1,12 +1,16 @@
 let button = document.getElementById("showFile");
 let title = "";
 let composer = "";
-let measures = [];
+let bassClef = [];
+let trebleClef = [];
 
 button.addEventListener('click', function(){
     getCredits();
-    console.log(getNotes());
+    getNotes();
+    console.log(trebleClef);
+    console.log(bassClef);
 })
+
 function getCredits() {
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(sessionStorage.getItem("file"), "text/xml");
@@ -39,16 +43,20 @@ function getCredits() {
     }
     document.getElementById("composer").innerHTML = composer;
 }
+
 function getNotes() {
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(sessionStorage.getItem("file"), "text/xml");
     let notes = [];
     let measureCount = 1;
     let measures = [];
+    // let bassClef = [];
+    // let trebleClef = [];
     let measure = xmlDoc.getElementsByTagName("measure");
     xmlDoc.getElementsByTagName("measure");
     for(let k = 0; k < measure.length; k++) {
-        let measureData = new Measure();
+        let measureTrebleData = new Measure();
+        let measureBassData = new Measure();
         for(let i = 0; i < measure[k].children.length; i++) {
             //console.log(measure[0].children[i].nodeName);
             if(measure[k].children[i].nodeName === "note") {
@@ -59,39 +67,47 @@ function getNotes() {
                 let rest = false;
                 let type;
                 let staff;
-                let j = 0;
                 for(let j = 0; j < measure[k].children[i].children.length; j++) {
-                    if(measure[k].children[i].children[j].nodeName === "chord") {
+                    let currentNode = measure[k].children[i].children[j];
+                    if(currentNode.nodeName === "chord") {
                         chord = true;
                     }
-                    if(measure[k].children[i].children[j].nodeName === "rest") {
+                    if(currentNode.nodeName === "rest") {
                         rest = true;
                     }
-                    if(measure[k].children[i].children[j].nodeName === "pitch") {
-                        note = measure[k].children[i].children[j].children[0].innerHTML; // Note
-                        if(measure[k].children[i].children[j].children[1].nodeName === "alter") {
-                            alter = measure[k].children[i].children[j].children[1].innerHTML;
-                            octave = measure[k].children[i].children[j].children[2].innerHTML;
+                    if(currentNode.nodeName === "pitch") {
+                        note = currentNode.children[0].innerHTML; // Note
+                        if(currentNode.children[1].nodeName === "alter") {
+                            alter = currentNode.children[1].innerHTML;
+                            octave = currentNode.children[2].innerHTML;
                         }
                         else {
-                            octave = measure[k].children[i].children[j].children[1].innerHTML;
+                            octave = currentNode.children[1].innerHTML;
                         }
                     }
-                    if(measure[k].children[i].children[j].nodeName === "type") {
-                        type = measure[k].children[i].children[j].innerHTML; // Note's beat
+                    if(currentNode.nodeName === "type") {
+                        type = currentNode.innerHTML; // Note's beat
                     }
-                    if(measure[k].children[i].children[j].nodeName === "staff") {
-                        staff = measure[k].children[i].children[j].innerHTML;
+                    if(currentNode.nodeName === "staff") {
+                        staff = currentNode.innerHTML;
                     }
                 }
-                measureData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
+                if(staff === "1") {
+                    measureTrebleData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
+                }
+                else if(staff === "2") {
+                    measureBassData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
+                }
+                //measureData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
                 //console.log(measureData);
             }
         }
-        measures.push(measureData);
+        trebleClef.push(measureTrebleData);
+        bassClef.push(measureBassData);
+        //measures.push(measureData);
     }
     //console.log(measures);
-    return measures;
+    //return bassClef;
     // console.log(notes.length);
     // for(let i = 0; i < notes.length; i++) {
     //     console.log(notes[i][0]);
@@ -103,6 +119,14 @@ function getNotes() {
     // noteData.push(pitch[0].childNodes);
     // notes.push(noteData);
     // console.log(notes[0][0]);
+}
+
+function seperateClefs(measures) {
+    bassClef = [];
+    trebleClef = [];
+    for(let i = 0; i < measures.length(); i++) {
+
+    }
 }
 
 class Measure {
