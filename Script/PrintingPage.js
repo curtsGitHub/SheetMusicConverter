@@ -44,44 +44,49 @@ function getNotes() {
     xmlDoc = parser.parseFromString(sessionStorage.getItem("file"), "text/xml");
     let notes = [];
     let measureCount = 1;
+    let measures = [];
     let measure = xmlDoc.getElementsByTagName("measure");
-    let measureData = new Measure();
-    console.log(measure[0]);
-    for(let i = 0; i < measure[0].children.length; i++) {
-        //console.log(measure[0].children[i].nodeName);
-        if(measure[0].children[i].nodeName === "note") {
-            let note;
-            let alter = 0;
-            let octave;
-            let chord = false;
-            let rest = false;
-            let type;
-            let j = 0;
-            for(let j = 0; j < measure[0].children[i].children.length; j++) {
-                if(measure[0].children[i].children[j].nodeName === "chord") {
-                    chord = true;
-                }
-                if(measure[0].children[i].children[j].nodeName === "rest") {
-                    rest = true;
-                }
-                if(measure[0].children[i].children[j].nodeName === "pitch") {
-                    note = measure[0].children[i].children[j].children[0].innerHTML; // Note
-                    if(measure[0].children[i].children[j].children[1].nodeName === "alter") {
-                        alter = measure[0].children[i].children[j].children[1].innerHTML;
-                        octave = measure[0].children[i].children[j].children[2].innerHTML;
+    xmlDoc.getElementsByTagName("measure");
+    for(let k = 0; k < measure.length; k++) {
+        let measureData = new Measure();
+        for(let i = 0; i < measure[k].children.length; i++) {
+            //console.log(measure[0].children[i].nodeName);
+            if(measure[k].children[i].nodeName === "note") {
+                let note;
+                let alter = 0;
+                let octave;
+                let chord = false;
+                let rest = false;
+                let type;
+                let j = 0;
+                for(let j = 0; j < measure[k].children[i].children.length; j++) {
+                    if(measure[k].children[i].children[j].nodeName === "chord") {
+                        chord = true;
                     }
-                    else {
-                        octave = measure[0].children[i].children[j].children[1].innerHTML;
+                    if(measure[k].children[i].children[j].nodeName === "rest") {
+                        rest = true;
+                    }
+                    if(measure[k].children[i].children[j].nodeName === "pitch") {
+                        note = measure[k].children[i].children[j].children[0].innerHTML; // Note
+                        if(measure[k].children[i].children[j].children[1].nodeName === "alter") {
+                            alter = measure[k].children[i].children[j].children[1].innerHTML;
+                            octave = measure[k].children[i].children[j].children[2].innerHTML;
+                        }
+                        else {
+                            octave = measure[k].children[i].children[j].children[1].innerHTML;
+                        }
+                    }
+                    if(measure[k].children[i].children[j].nodeName === "type") {
+                        type = measure[k].children[i].children[j].innerHTML; // Note's beat
                     }
                 }
-                if(measure[0].children[i].children[j].nodeName === "type") {
-                    type = measure[0].children[i].children[j].innerHTML; // Note's beat
-                }
+                measureData.addNote(new Note(note, alter, chord, rest, octave, type));
+                //console.log(measureData);
             }
-            measureData.addNote(new Note(note, alter, chord, rest, octave, type));
-            console.log(measureData);
         }
+        measures.push(measureData);
     }
+    console.log(measures);
     // console.log(notes.length);
     // for(let i = 0; i < notes.length; i++) {
     //     console.log(notes[i][0]);
