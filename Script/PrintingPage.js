@@ -5,7 +5,7 @@ let measures = [];
 
 button.addEventListener('click', function(){
     getCredits();
-    getNotes();
+    console.log(getNotes());
 })
 function getCredits() {
     parser = new DOMParser();
@@ -58,6 +58,7 @@ function getNotes() {
                 let chord = false;
                 let rest = false;
                 let type;
+                let staff;
                 let j = 0;
                 for(let j = 0; j < measure[k].children[i].children.length; j++) {
                     if(measure[k].children[i].children[j].nodeName === "chord") {
@@ -79,14 +80,18 @@ function getNotes() {
                     if(measure[k].children[i].children[j].nodeName === "type") {
                         type = measure[k].children[i].children[j].innerHTML; // Note's beat
                     }
+                    if(measure[k].children[i].children[j].nodeName === "staff") {
+                        staff = measure[k].children[i].children[j].innerHTML;
+                    }
                 }
-                measureData.addNote(new Note(note, alter, chord, rest, octave, type));
+                measureData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
                 //console.log(measureData);
             }
         }
         measures.push(measureData);
     }
-    console.log(measures);
+    //console.log(measures);
+    return measures;
     // console.log(notes.length);
     // for(let i = 0; i < notes.length; i++) {
     //     console.log(notes[i][0]);
@@ -119,12 +124,14 @@ class Note {
     chord;
     rest;
     type;
-    constructor(note, alter, chord, rest, octave, type) {
+    staff;
+    constructor(note, alter, chord, rest, octave, type, staff) {
         this.octave = octave;
         this.note = note;
         this.alter = alter;
         this.chord = chord;
         this.type = type;
         this.rest = rest;
+        this.staff = staff
     }
 }
