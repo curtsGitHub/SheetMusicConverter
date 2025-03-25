@@ -55,64 +55,22 @@ function getNotes() {
     // let trebleClef = [];
     let measure = xmlDoc.getElementsByTagName("measure");
     xmlDoc.getElementsByTagName("measure");
+    
     for(let k = 0; k < measure.length; k++) {
         let measureTrebleData = new Measure("treble");
         let measureBassData = new Measure("bass");
         let firstChord = true;
         let chordNotes;
-        for(let i = 0; i < measure[k].children.length; i++) {
+        for(let i = 0; i < measure[k].children.length-1; i++) {
             //console.log(measure[0].children[i].nodeName);
             if(measure[k].children[i].nodeName === "note") {
-                let note;
-                let alter = 0;
-                let octave;
-                let chord = false;
-                let rest = false;
-                let type;
-                let staff;
-                for(let j = 0; j < measure[k].children[i].children.length; j++) {
-                    let currentNode = measure[k].children[i].children[j];
-                    if(currentNode.nodeName === "chord") {
-                        chord = true;
-                        //console.log(measure[k].children[i]);
-                    }
-                    if(currentNode.nodeName === "rest") {
-                        rest = true;
-                    }
-                    if(currentNode.nodeName === "pitch") {
-                        note = currentNode.children[0].innerHTML; // Note
-                        if(currentNode.children[1].nodeName === "alter") {
-                            alter = currentNode.children[1].innerHTML;
-                            octave = currentNode.children[2].innerHTML;
-                        }
-                        else {
-                            octave = currentNode.children[1].innerHTML;
-                        }
-                    }
-                    if(currentNode.nodeName === "type") {
-                        type = currentNode.innerHTML; // Note's beat
-                    }
-                    if(currentNode.nodeName === "staff") {
-                        staff = currentNode.innerHTML;
-                    }
-                }
-                note = new Note(note, alter, chord, rest, octave, type, staff);
-                // if(prevNote.chord) {
-                //     console.log("CHORD YAYAYAYYAYAYAYAYAYY" + note);
-                // }
-            
-                if(chord && firstChord) {
-                    // if(prevNote.staff === "1") {
-                    //     measureTrebleData.removeLast();
-                    // }
-                    // else if(prevNote.staff === "2") {
-                    //     measureBassData.removeLast();
-                    // }
+                let note = getNote(measure[k].children[i]);
+                let nextNote = getNote(measure[k].children[i+1]);
+                if(note.chord && firstChord) {
                     firstChord = false;
-                    //console.log(prevNote);
                     chordNotes = new Chord(prevNote);
                 }
-                if(chord) {
+                if(note.chord) {
                     chordNotes.addNote(note);
                 }
                 else {
@@ -121,18 +79,21 @@ function getNotes() {
                     if(chordNotes != null) {
                         firstChord = true;
                         if(chordNotes.getStaff === "1") {
+                            //measureTrebleData.removeLast();
                             measureTrebleData.addChord(chordNotes);
                         }
                         else {
+                            //measureBassData.removeLast();
                             measureBassData.addChord(chordNotes);
                             console.log(measureBassData);
                         }
 
                     }
-                    else if(staff === "1") {
+                    else if(note.staff === "1" && nextNote.chord == false) {
                         measureTrebleData.addNote(note);
                     }
-                    else if(staff === "2") {
+                    else if(note.staff === "2" && nextNote.chord == false) {
+                        console.log(note);
                         measureBassData.addNote(note);
                     }
                 }
@@ -141,8 +102,12 @@ function getNotes() {
                 //console.log(measureData);
             }
         }
-        trebleClef.push(measureTrebleData);
-        bassClef.push(measureBassData);
+        if(measureTrebleData != null && measureTrebleData.notes.length != 0) {
+            trebleClef.push(measureTrebleData);
+        }
+        if(measureBassData != null && measureBassData.notes.length != 0) {
+            bassClef.push(measureBassData);
+        }
         //measures.push(measureData);
     }
     //console.log(measures);
@@ -159,7 +124,43 @@ function getNotes() {
     // notes.push(noteData);
     // console.log(notes[0][0]);
 }
-
+function getNote(node) {
+    let note;
+    let alter = 0;
+    let octave;
+    let chord = false;
+    let rest = false;
+    let type;
+    let staff;
+    for(let j = 0; j < node.children.length; j++) {
+        let currentNode = node.children[j];
+        if(currentNode.nodeName === "chord") {
+            chord = true;
+            //console.log(measure[k].children[i]);
+        }
+        if(currentNode.nodeName === "rest") {
+            rest = true;
+        }
+        if(currentNode.nodeName === "pitch") {
+            note = currentNode.children[0].innerHTML; // Note
+            if(currentNode.children[1].nodeName === "alter") {
+                alter = currentNode.children[1].innerHTML;
+                octave = currentNode.children[2].innerHTML;
+            }
+            else {
+                octave = currentNode.children[1].innerHTML;
+            }
+        }
+        if(currentNode.nodeName === "type") {
+            type = currentNode.innerHTML; // Note's beat
+        }
+        if(currentNode.nodeName === "staff") {
+            staff = currentNode.innerHTML;
+        }
+    }
+    note = new Note(note, alter, chord, rest, octave, type, staff);
+    return note;
+}
 class Measure {
     notes = [];
     staff;
