@@ -50,13 +50,16 @@ function getNotes() {
     let notes = [];
     let measureCount = 1;
     let measures = [];
+    let prevNote = new Note();
     // let bassClef = [];
     // let trebleClef = [];
     let measure = xmlDoc.getElementsByTagName("measure");
     xmlDoc.getElementsByTagName("measure");
     for(let k = 0; k < measure.length; k++) {
-        let measureTrebleData = new Measure();
-        let measureBassData = new Measure();
+        let measureTrebleData = new Measure("treble");
+        let measureBassData = new Measure("bass");
+        let firstChord = true;
+        let chordNotes;
         for(let i = 0; i < measure[k].children.length; i++) {
             //console.log(measure[0].children[i].nodeName);
             if(measure[k].children[i].nodeName === "note") {
@@ -71,6 +74,7 @@ function getNotes() {
                     let currentNode = measure[k].children[i].children[j];
                     if(currentNode.nodeName === "chord") {
                         chord = true;
+                        //console.log(measure[k].children[i]);
                     }
                     if(currentNode.nodeName === "rest") {
                         rest = true;
@@ -92,12 +96,47 @@ function getNotes() {
                         staff = currentNode.innerHTML;
                     }
                 }
-                if(staff === "1") {
-                    measureTrebleData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
+                note = new Note(note, alter, chord, rest, octave, type, staff);
+                // if(prevNote.chord) {
+                //     console.log("CHORD YAYAYAYYAYAYAYAYAYY" + note);
+                // }
+            
+                if(chord && firstChord) {
+                    // if(prevNote.staff === "1") {
+                    //     measureTrebleData.removeLast();
+                    // }
+                    // else if(prevNote.staff === "2") {
+                    //     measureBassData.removeLast();
+                    // }
+                    firstChord = false;
+                    //console.log(prevNote);
+                    chordNotes = new Chord(prevNote);
                 }
-                else if(staff === "2") {
-                    measureBassData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
+                if(chord) {
+                    chordNotes.addNote(note);
                 }
+                else {
+                    //console.log(chordNotes)
+                    //console.log(note);
+                    if(chordNotes != null) {
+                        firstChord = true;
+                        if(chordNotes.getStaff === "1") {
+                            measureTrebleData.addChord(chordNotes);
+                        }
+                        else {
+                            measureBassData.addChord(chordNotes);
+                            console.log(measureBassData);
+                        }
+
+                    }
+                    else if(staff === "1") {
+                        measureTrebleData.addNote(note);
+                    }
+                    else if(staff === "2") {
+                        measureBassData.addNote(note);
+                    }
+                }
+                prevNote = note;
                 //measureData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
                 //console.log(measureData);
             }
@@ -121,22 +160,25 @@ function getNotes() {
     // console.log(notes[0][0]);
 }
 
-function seperateClefs(measures) {
-    bassClef = [];
-    trebleClef = [];
-    for(let i = 0; i < measures.length(); i++) {
-
-    }
-}
-
 class Measure {
     notes = [];
-    constructor() {
-        
+    staff;
+    constructor (staff) {
+        this.staff = staff;
     }
-
     addNote(note) {
         this.notes.push(note);
+    }
+    addChord(chord) {
+        this.notes.push(chord);
+    }
+    removeLast() {
+        console.log(this.notes);
+        this.notes.pop();
+        console.log(this.notes);
+    }
+    getStaff() {
+        return staff;
     }
     
 }
@@ -158,4 +200,24 @@ class Note {
         this.rest = rest;
         this.staff = staff
     }
+}
+
+class Chord {
+    notes = [];
+    constructor(note) {
+        this.notes.push(note);
+    }
+    addNote(note) {
+        this.notes.push(note);
+    }
+    checkEmpty() {
+        if(this.notes.length == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
 }
