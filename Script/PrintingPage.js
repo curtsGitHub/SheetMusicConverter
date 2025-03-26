@@ -60,14 +60,18 @@ function getNotes() {
         let measureTrebleData = new Measure("treble");
         let measureBassData = new Measure("bass");
         let firstChord = true;
+        let addChord = false;
         let chordNotes;
+        console.log(measure[k]);
         for(let i = 0; i < measure[k].children.length-1; i++) {
+            console.log(i);
             //console.log(measure[0].children[i].nodeName);
             if(measure[k].children[i].nodeName === "note") {
                 let note = getNote(measure[k].children[i]);
                 let nextNote = getNote(measure[k].children[i+1]);
                 if(note.chord && firstChord) {
                     firstChord = false;
+                    addChord = true;
                     chordNotes = new Chord(prevNote);
                 }
                 if(note.chord) {
@@ -78,6 +82,7 @@ function getNotes() {
                     //console.log(note);
                     if(chordNotes != null) {
                         firstChord = true;
+                        addChord = false;
                         if(chordNotes.getStaff === "1") {
                             //measureTrebleData.removeLast();
                             measureTrebleData.addChord(chordNotes);
@@ -89,7 +94,7 @@ function getNotes() {
                         }
 
                     }
-                    else if(note.staff === "1" && nextNote.chord == false) {
+                    if(note.staff === "1" && nextNote.chord == false) {
                         measureTrebleData.addNote(note);
                     }
                     else if(note.staff === "2" && nextNote.chord == false) {
@@ -102,6 +107,36 @@ function getNotes() {
                 //console.log(measureData);
             }
         }
+        if(measure[k].children[measure[k].children.length-1].nodeName === "note") {
+            let note = getNote(measure[k].children[measure[k].children.length-1]);
+            console.log("WOW")
+            console.log(measureBassData);
+            console.log("__________________")
+            if(note.chord) {
+                addChord = false;
+                chordNotes.addNote(note);
+                if(note.staff === "1") {
+                    measureTrebleData.addChord(chordNotes);
+                }
+                else if(note.staff === "2") {
+                    console.log(note);
+                    measureBassData.addChord(chordNotes);
+                }
+            }
+        }
+        if(chordNotes != null && addChord == true) {
+            console.log("ADDED NOTES");
+            console.log(k);
+            console.log(addChord)
+            if(chordNotes.notes[0].staff === "1") {
+                measureTrebleData.addChord(chordNotes);
+            }
+            else if(chordNotes.notes[0].staff === "2") {
+                measureBassData.addChord(chordNotes)
+            }
+            console.log(measureBassData);
+        }
+
         if(measureTrebleData != null && measureTrebleData.notes.length != 0) {
             trebleClef.push(measureTrebleData);
         }
@@ -205,7 +240,9 @@ class Note {
 
 class Chord {
     notes = [];
-    constructor(note) {
+    staff;
+    constructor(note, staff) {
+        this.staff = staff;
         this.notes.push(note);
     }
     addNote(note) {
@@ -218,6 +255,9 @@ class Chord {
         else {
             return false;
         }
+    }
+    getStaff() {
+        return staff;
     }
 
 
