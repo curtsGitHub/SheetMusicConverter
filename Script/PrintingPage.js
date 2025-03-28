@@ -15,16 +15,25 @@ button.addEventListener('click', function(){
 function createSheetMusic(trebleClef, bassClef) {
     console.log(trebleClef);
     for(let i = 0; i < trebleClef.length; i++) {
+        let newDiv = document.createElement("table");
+        newDiv.className = "measure" + (i+1);
+        let currentDiv = document.getElementsByClassName("measures")[0];
+        currentDiv.appendChild(newDiv);
+        let content;
+        // add the text node to the newly created div
         for(let j = 0; j < trebleClef[i].notes.length; j++) {
-            let newDiv = document.createElement("div");
-            let newContent = document.createTextNode(trebleClef[i].notes[j].note);
+            console.log(i);
+            let newNote = document.createElement("td");
+            let noteData = document.createTextNode(trebleClef[i].notes[j].note);
 
             // add the text node to the newly created div
-            newDiv.appendChild(newContent);
-            let currentDiv = document.getElementById("container");
-            document.body.insertBefore(newDiv, currentDiv);
+            newNote.appendChild(noteData);
+            let currentDiv = document.getElementsByClassName("measure" + (i + 1))[0];
+            console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
+            currentDiv.appendChild(newNote);
             console.log(trebleClef[i].notes[j].note);
         }
+        // console.log(trebleClef[i].notes[j].note);
     }
 }
 function getCredits() {
