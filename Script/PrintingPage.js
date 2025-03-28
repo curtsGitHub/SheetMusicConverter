@@ -7,10 +7,26 @@ let trebleClef = [];
 button.addEventListener('click', function(){
     getCredits();
     getNotes();
+    createSheetMusic(trebleClef, bassClef);
     console.log(trebleClef);
     console.log(bassClef);
 })
 
+function createSheetMusic(trebleClef, bassClef) {
+    console.log(trebleClef);
+    for(let i = 0; i < trebleClef.length; i++) {
+        for(let j = 0; j < trebleClef[i].notes.length; j++) {
+            let newDiv = document.createElement("div");
+            let newContent = document.createTextNode(trebleClef[i].notes[j].note);
+
+            // add the text node to the newly created div
+            newDiv.appendChild(newContent);
+            let currentDiv = document.getElementById("container");
+            document.body.insertBefore(newDiv, currentDiv);
+            console.log(trebleClef[i].notes[j].note);
+        }
+    }
+}
 function getCredits() {
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(sessionStorage.getItem("file"), "text/xml");
@@ -25,7 +41,7 @@ function getCredits() {
         title = xmlDoc.getElementsByTagName("credit-words")[i].childNodes[0].nodeValue;
     }
     else {
-        title = " ";
+        title = "_";
     }
     document.getElementById("title").innerHTML = title;
     if(xmlDoc.getElementsByTagName("creator").length != 0) {
@@ -39,7 +55,7 @@ function getCredits() {
         composer = xmlDoc.getElementsByTagName("credit-words")[i].childNodes[0].nodeValue;
     }
     else {
-        composer = " ";
+        composer = "_";
     }
     document.getElementById("composer").innerHTML = composer;
 }
@@ -62,9 +78,9 @@ function getNotes() {
         let firstChord = true;
         let addChord = false;
         let chordNotes;
-        console.log(measure[k]);
+        //console.log(measure[k]);
         for(let i = 0; i < measure[k].children.length-1; i++) {
-            console.log(i);
+            //console.log(i);
             //console.log(measure[0].children[i].nodeName);
             if(measure[k].children[i].nodeName === "note") {
                 let note = getNote(measure[k].children[i]);
@@ -90,7 +106,7 @@ function getNotes() {
                         else {
                             //measureBassData.removeLast();
                             measureBassData.addChord(chordNotes);
-                            console.log(measureBassData);
+                            //console.log(measureBassData);
                         }
 
                     }
@@ -98,7 +114,7 @@ function getNotes() {
                         measureTrebleData.addNote(note);
                     }
                     else if(note.staff === "2" && nextNote.chord == false) {
-                        console.log(note);
+                        //console.log(note);
                         measureBassData.addNote(note);
                     }
                 }
@@ -109,9 +125,9 @@ function getNotes() {
         }
         if(measure[k].children[measure[k].children.length-1].nodeName === "note") {
             let note = getNote(measure[k].children[measure[k].children.length-1]);
-            console.log("WOW")
-            console.log(measureBassData);
-            console.log("__________________")
+            //console.log("WOW")
+            //console.log(measureBassData);
+            //console.log("__________________")
             if(note.chord) {
                 addChord = false;
                 chordNotes.addNote(note);
@@ -119,22 +135,22 @@ function getNotes() {
                     measureTrebleData.addChord(chordNotes);
                 }
                 else if(note.staff === "2") {
-                    console.log(note);
+                    //console.log(note);
                     measureBassData.addChord(chordNotes);
                 }
             }
         }
         if(chordNotes != null && addChord == true) {
-            console.log("ADDED NOTES");
-            console.log(k);
-            console.log(addChord)
+            //console.log("ADDED NOTES");
+            //console.log(k);
+            //console.log(addChord)
             if(chordNotes.notes[0].staff === "1") {
                 measureTrebleData.addChord(chordNotes);
             }
             else if(chordNotes.notes[0].staff === "2") {
                 measureBassData.addChord(chordNotes)
             }
-            console.log(measureBassData);
+            //console.log(measureBassData);
         }
 
         if(measureTrebleData != null && measureTrebleData.notes.length != 0) {

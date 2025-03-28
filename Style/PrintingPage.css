@@ -14,3 +14,7 @@ h2 {
     display: flex;
     justify-content: center;
 }
+.container {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+}
