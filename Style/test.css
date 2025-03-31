@@ -1,0 +1,37 @@
+h1 {
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+h2 {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: smaller;
+}
+#Title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -40px;
+}
+#Composer {
+    display: flex;
+    justify-content: center;
+}
+.measure1 {
+    border: black;
+    border: 10px;
+
+    
+}
+.measures{
+    border: 1px solid black;
+    
+}
+#container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.notesStart {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    outline: 10px;
+    border: 10px;
+    outline: black;
+}

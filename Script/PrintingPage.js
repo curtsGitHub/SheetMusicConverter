@@ -25,10 +25,12 @@ function createSheetMusic(trebleClef, bassClef) {
             console.log(i);
             let newNote = document.createElement("td");
             let noteData = document.createTextNode(trebleClef[i].notes[j].note);
+            let newColumn = document.createElement("th");
 
             // add the text node to the newly created div
             newNote.appendChild(noteData);
             let currentDiv = document.getElementsByClassName("measure" + (i + 1))[0];
+
             console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
             currentDiv.appendChild(newNote);
             console.log(trebleClef[i].notes[j].note);
