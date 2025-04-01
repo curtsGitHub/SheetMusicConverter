@@ -19,18 +19,42 @@ function createSheetMusic(trebleClef, bassClef) {
         newDiv.className = "measure" + (i+1);
         let currentDiv = document.getElementsByClassName("measures")[0];
         currentDiv.appendChild(newDiv);
+        let note = document.createElement("tr");
+        note.id = "a";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "b";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "c";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "d";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "e";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "f";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "g";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "a";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "b";
+        newDiv.appendChild(note);
+        console.log(document);
         let content;
         // add the text node to the newly created div
         for(let j = 0; j < trebleClef[i].notes.length; j++) {
-            console.log(i);
+            let currentNote = newDiv.getNearestChild(trebleClef[i].notes[j].note);
             let newNote = document.createElement("td");
             let noteData = document.createTextNode(trebleClef[i].notes[j].note);
-            let newColumn = document.createElement("th");
-
-            // add the text node to the newly created div
             newNote.appendChild(noteData);
-            let currentDiv = document.getElementsByClassName("measure" + (i + 1))[0];
-
+            currentNote[0].appendChild(noteData);
             console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
             currentDiv.appendChild(newNote);
             console.log(trebleClef[i].notes[j].note);
