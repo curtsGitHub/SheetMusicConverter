@@ -1,3 +1,5 @@
+/* --- Main processing page: Reads the file and converts it into an arraylist for easier access,
+Finds the credits to display, manipulates the printing page's table to display the notes*/
 let button = document.getElementById("showFile");
 let title = "";
 let composer = "";
@@ -12,6 +14,7 @@ button.addEventListener('click', function(){
     console.log(bassClef);
 })
 
+// Creates the html file that will be printed
 function createSheetMusic(trebleClef, bassClef) {
     console.log(trebleClef);
     for(let i = 0; i < trebleClef.length; i++) {
@@ -20,12 +23,6 @@ function createSheetMusic(trebleClef, bassClef) {
         let currentDiv = document.getElementsByClassName("measures")[0];
         currentDiv.appendChild(newDiv);
         let note = document.createElement("tr");
-        note.id = "a";
-        newDiv.appendChild(note);
-        note = document.createElement("tr");
-        note.id = "b";
-        newDiv.appendChild(note);
-        note = document.createElement("tr");
         note.id = "c";
         newDiv.appendChild(note);
         note = document.createElement("tr");
@@ -46,25 +43,45 @@ function createSheetMusic(trebleClef, bassClef) {
         note = document.createElement("tr");
         note.id = "b";
         newDiv.appendChild(note);
-        console.log(document);
+        let currentNumNotes = 0;
+        //console.log(document);
         let content;
         // add the text node to the newly created div
         for(let j = 0; j < trebleClef[i].notes.length; j++) {
-            let currentNote = newDiv.getNearestChild(trebleClef[i].notes[j].note);
+            //console.log(newDiv);
+            let currentNote = newDiv.rows[0];
+            let currentNotes = newDiv.rows;
+            let blankNote = document.createElement("td");
+            for(let k = 0; k < currentNotes.length; k++) {
+                if(currentNotes[k].id.toUpperCase() === trebleClef[i].notes[j].note) {
+                    currentNote = currentNotes[k];
+                }
+            }
             let newNote = document.createElement("td");
             let noteData = document.createTextNode(trebleClef[i].notes[j].note);
             newNote.appendChild(noteData);
-            currentNote[0].appendChild(noteData);
-            console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
-            currentDiv.appendChild(newNote);
-            console.log(trebleClef[i].notes[j].note);
+            //console.log(newNote);
+            //currentNote[0].appendChild(noteData);
+            //console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
+            console.log(currentNote.size);
+            for(let l = 0; l < currentNumNotes-currentNote.length; l++) {
+                currentNote.appendChild(blankNote);
+            }
+            currentNote.appendChild(newNote);
+            currentNumNotes++;
+            //console.log(trebleClef[i].notes[j].note);
         }
         // console.log(trebleClef[i].notes[j].note);
     }
+    console.log(document);
 }
+
+// Gets the title and composer
 function getCredits() {
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(sessionStorage.getItem("file"), "text/xml");
+    
+    // All the different ways titles could be shown
     if(xmlDoc.getElementsByTagName("work-title").length != 0) {
         title = xmlDoc.getElementsByTagName("work-title")[0].childNodes[0].nodeValue;
     }
@@ -79,6 +96,8 @@ function getCredits() {
         title = "_";
     }
     document.getElementById("title").innerHTML = title;
+
+    // All the different ways the composer could be shown
     if(xmlDoc.getElementsByTagName("creator").length != 0) {
         composer = xmlDoc.getElementsByTagName("creator")[0].childNodes[0].nodeValue;
     }
@@ -95,6 +114,7 @@ function getCredits() {
     document.getElementById("composer").innerHTML = composer;
 }
 
+// Gets the measures data
 function getNotes() {
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(sessionStorage.getItem("file"), "text/xml");
@@ -107,6 +127,7 @@ function getNotes() {
     let measure = xmlDoc.getElementsByTagName("measure");
     xmlDoc.getElementsByTagName("measure");
     
+    // Go through each measure
     for(let k = 0; k < measure.length; k++) {
         let measureTrebleData = new Measure("treble");
         let measureBassData = new Measure("bass");
@@ -114,12 +135,16 @@ function getNotes() {
         let addChord = false;
         let chordNotes;
         //console.log(measure[k]);
+        // Go through each note
         for(let i = 0; i < measure[k].children.length-1; i++) {
             //console.log(i);
             //console.log(measure[0].children[i].nodeName);
+            // Extract the note, the octave, sharps/flats, if its a rest and if it's a chord
             if(measure[k].children[i].nodeName === "note") {
                 let note = getNote(measure[k].children[i]);
                 let nextNote = getNote(measure[k].children[i+1]);
+
+                // Chord extraction to keep all the notes in the chord together
                 if(note.chord && firstChord) {
                     firstChord = false;
                     addChord = true;
@@ -131,6 +156,7 @@ function getNotes() {
                 else {
                     //console.log(chordNotes)
                     //console.log(note);
+                    // If there is a chord, add it and reset chord flags
                     if(chordNotes != null) {
                         firstChord = true;
                         addChord = false;
@@ -145,6 +171,7 @@ function getNotes() {
                         }
 
                     }
+                    // Add normal notes and make sure you don't add the first note of a chord
                     if(note.staff === "1" && nextNote.chord == false) {
                         measureTrebleData.addNote(note);
                     }
@@ -158,12 +185,18 @@ function getNotes() {
                 //console.log(measureData);
             }
         }
+        // Check the note that you're missing because you look at the next note so you have to add
+        // a bound
         if(measure[k].children[measure[k].children.length-1].nodeName === "note") {
             let note = getNote(measure[k].children[measure[k].children.length-1]);
             //console.log("WOW")
             //console.log(measureBassData);
             //console.log("__________________")
-            if(note.chord) {
+            // Check if it's the second note of the chord
+            if(note.chord && firstChord) {
+                chordNotes = new Chord(prevNote);
+            }
+            else if(note.chord) {
                 addChord = false;
                 chordNotes.addNote(note);
                 if(note.staff === "1") {
@@ -175,6 +208,7 @@ function getNotes() {
                 }
             }
         }
+        // Add the newly added chord
         if(chordNotes != null && addChord == true) {
             //console.log("ADDED NOTES");
             //console.log(k);
@@ -188,6 +222,7 @@ function getNotes() {
             //console.log(measureBassData);
         }
 
+        // Add the measure to the entire treble/bass clef
         if(measureTrebleData != null && measureTrebleData.notes.length != 0) {
             trebleClef.push(measureTrebleData);
         }
@@ -210,6 +245,8 @@ function getNotes() {
     // notes.push(noteData);
     // console.log(notes[0][0]);
 }
+
+// Gets the note data
 function getNote(node) {
     let note;
     let alter = 0;
@@ -229,7 +266,7 @@ function getNote(node) {
         }
         if(currentNode.nodeName === "pitch") {
             note = currentNode.children[0].innerHTML; // Note
-            if(currentNode.children[1].nodeName === "alter") {
+            if(currentNode.children[1].nodeName === "alter") { // sharps/flats
                 alter = currentNode.children[1].innerHTML;
                 octave = currentNode.children[2].innerHTML;
             }
@@ -247,6 +284,8 @@ function getNote(node) {
     note = new Note(note, alter, chord, rest, octave, type, staff);
     return note;
 }
+
+// Class for a measure, stores all the notes in the measure
 class Measure {
     notes = [];
     staff;
@@ -259,7 +298,7 @@ class Measure {
     addChord(chord) {
         this.notes.push(chord);
     }
-    removeLast() {
+    removeLast() { // remove this
         console.log(this.notes);
         this.notes.pop();
         console.log(this.notes);
@@ -270,6 +309,7 @@ class Measure {
     
 }
 
+// Class for a note, stores all the data needed in the note
 class Note {
     octave;
     note;
@@ -289,6 +329,7 @@ class Note {
     }
 }
 
+// Class for a chord, stores all the notes in each chord
 class Chord {
     notes = [];
     staff;

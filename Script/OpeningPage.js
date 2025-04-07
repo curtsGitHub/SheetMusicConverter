@@ -1,3 +1,4 @@
+// --- File reader: Gets the file stores it ---
 let button = document.getElementById("submit");
 let file = document.getElementById("sheetMusic");
 let addFileButton = document.getElementById("addFile");
@@ -19,7 +20,7 @@ file.addEventListener('change', (event) => {
   
     reader.onload = (e) => {
       const fileContent = e.target.result;
-      // Process fileContent here
+      // Stores the file for the next page to get
       sessionStorage.setItem("file", fileContent);
       console.log(fileContent);
     };
@@ -32,7 +33,6 @@ file.addEventListener('change', (event) => {
   });
 
 function readXML(file) {
-  
     const reader = new FileReader();
     reader.readAsDataURL(file);
     console.log(reader.readAsDataURL(file));
