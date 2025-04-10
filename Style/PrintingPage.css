@@ -15,23 +15,6 @@ h2 {
     display: flex;
     justify-content: center;
 }
-.measures {
-    border: black;
-    border: 10px;
-}
-.measure1 {
-    border: black;
-    border: 10px;
-
-    
-}
-table{
-    border: 1px solid black;
-}
-.notesStart {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    outline: 10px;
-    border: 10px;
-    outline: black;
+table, td {
+    border: 10px black;
 }

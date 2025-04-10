@@ -16,60 +16,208 @@ button.addEventListener('click', function(){
 
 // Creates the html file that will be printed
 function createSheetMusic(trebleClef, bassClef) {
-    console.log(trebleClef);
+    //console.log(trebleClef);
     for(let i = 0; i < trebleClef.length; i++) {
+        let newColumn = document.createElement("td");
         let newDiv = document.createElement("table");
         newDiv.className = "measure" + (i+1);
         let currentDiv = document.getElementsByClassName("measures")[0];
+        //console.log(currentDiv);
         currentDiv.appendChild(newDiv);
         let note = document.createElement("tr");
-        note.id = "c";
+        note.id = "c8";
         newDiv.appendChild(note);
         note = document.createElement("tr");
-        note.id = "d";
+        note.id = "b7";
         newDiv.appendChild(note);
         note = document.createElement("tr");
-        note.id = "e";
+        note.id = "a7";
         newDiv.appendChild(note);
         note = document.createElement("tr");
-        note.id = "f";
+        note.id = "g7";
         newDiv.appendChild(note);
         note = document.createElement("tr");
-        note.id = "g";
+        note.id = "f7";
         newDiv.appendChild(note);
         note = document.createElement("tr");
-        note.id = "a";
+        note.id = "e7";
         newDiv.appendChild(note);
         note = document.createElement("tr");
-        note.id = "b";
+        note.id = "d7";
         newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "c7";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "b6";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "a6";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "g6";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "f6";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "e6";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "d6";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "c6";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "b5";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "a5";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "g5";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "f5";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "e5";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "d5";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "c5";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "b4";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "a4";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "g4";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "f4";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "e4";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "d4";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "c4";
+        newDiv.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "b3";
+        newDiv.appendChild(note);
+
+        // note = document.createElement("tr");
+        // note.id = "b1";
+        // newDiv.appendChild(note);
+        // note = document.createElement("tr");
+        // note.id = "a1";
+        // newDiv.appendChild(note);
+        // note = document.createElement("tr");
+        // note.id = "g1";
+        // newDiv.appendChild(note);
+        // note = document.createElement("tr");
+        // note.id = "f1";
+        // newDiv.appendChild(note);
+        // note = document.createElement("tr");
+        // note.id = "e1";
+        // newDiv.appendChild(note);
+        // note = document.createElement("tr");
+        // note.id = "d1";
+        // newDiv.appendChild(note);
+        // note = document.createElement("tr");
+        // note.id = "c1";
+        // newDiv.appendChild(note);
+        
+        // note = document.createElement("tr");
+        // note.id = "b2";
+        // newDiv.appendChild(note);
+        
         let currentNumNotes = 0;
         //console.log(document);
         let content;
         // add the text node to the newly created div
         for(let j = 0; j < trebleClef[i].notes.length; j++) {
+            //console.log(trebleClef[i].notes[j].rest);
             //console.log(newDiv);
             let currentNote = newDiv.rows[0];
             let currentNotes = newDiv.rows;
-            let blankNote = document.createElement("td");
-            for(let k = 0; k < currentNotes.length; k++) {
-                if(currentNotes[k].id.toUpperCase() === trebleClef[i].notes[j].note) {
-                    currentNote = currentNotes[k];
+            //let newNote = document.createElement("td");
+            if(trebleClef[i].notes[j] instanceof Chord) {
+                for(let m = 0; m < trebleClef[i].notes[j].notes.length; m++) {
+                    //console.log(currentNotes);
+                    for(let k = 0; k < currentNotes.length; k++) {
+                        if(currentNotes[k].id.toUpperCase() === trebleClef[i].notes[j].notes[m].note + "" + trebleClef[i].notes[j].notes[m].octave) {
+                            console.log(trebleClef[i].notes[j].notes[m].note + "" + trebleClef[i].notes[j].notes[m].octave);
+                            currentNote = currentNotes[k];
+                            // console.log("_______________");
+                            // console.log(currentNote);
+                            // console.log(trebleClef[i].notes[j].note);
+                        }
+                    }
+                    let newNote = document.createElement("td");
+                    let noteData = document.createTextNode(trebleClef[i].notes[j].notes[m].note);
+                    //console.log(noteData);
+                    newNote.appendChild(noteData);
+                    let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
+                    for(let l = 0; l < limit; l++) {
+                        let blankNote = document.createElement("td");
+                        blankNote.textContent = "";
+                        currentNote.appendChild(blankNote);
+                    }
+                    currentNote.appendChild(newNote);
                 }
+                currentNumNotes++;
             }
-            let newNote = document.createElement("td");
-            let noteData = document.createTextNode(trebleClef[i].notes[j].note);
-            newNote.appendChild(noteData);
-            //console.log(newNote);
-            //currentNote[0].appendChild(noteData);
-            //console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
-            console.log(currentNote.size);
-            for(let l = 0; l < currentNumNotes-currentNote.length; l++) {
-                currentNote.appendChild(blankNote);
+            else if(trebleClef[i].notes[j].rest) {
+                //console.log(trebleClef[i].notes[j]);
             }
-            currentNote.appendChild(newNote);
-            currentNumNotes++;
-            //console.log(trebleClef[i].notes[j].note);
+            else {
+                //console.log(currentNotes);
+                for(let k = 0; k < currentNotes.length; k++) {
+                    if(currentNotes[k].id.toUpperCase() === trebleClef[i].notes[j].note + "" + trebleClef[i].notes[j].octave) {
+                        currentNote = currentNotes[k];
+                        // console.log("_______________");
+                        // console.log(currentNote);
+                        // console.log(trebleClef[i].notes[j].note);
+                    }
+                }
+                let newNote = document.createElement("td");
+                let noteData = document.createTextNode(trebleClef[i].notes[j].note);
+                //console.log(noteData);
+                newNote.appendChild(noteData);
+                let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
+                for(let l = 0; l < limit; l++) {
+                    let blankNote = document.createElement("td");
+                    blankNote.textContent = "";
+                    currentNote.appendChild(blankNote);
+                }
+                currentNote.appendChild(newNote);
+                currentNumNotes++;
+            }
+                //console.log(newNote);
+                //currentNote[0].appendChild(noteData);
+                //console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
+                // console.log(currentNote.querySelectorAll("td").length);
+                // console.log(currentNumNotes);
+                // console.log(currentNote);
+                // let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
+                // for(let l = 0; l < limit; l++) {
+                //     let blankNote = document.createElement("td");
+                //     blankNote.textContent = "";
+                //     currentNote.appendChild(blankNote);
+                // }
+                // currentNote.appendChild(newNote);
+                // currentNumNotes++;
+                //console.log(trebleClef[i].notes[j].note);
         }
         // console.log(trebleClef[i].notes[j].note);
     }
@@ -148,7 +296,7 @@ function getNotes() {
                 if(note.chord && firstChord) {
                     firstChord = false;
                     addChord = true;
-                    chordNotes = new Chord(prevNote);
+                    chordNotes = new Chord(prevNote, String(prevNote.staff));
                 }
                 if(note.chord) {
                     chordNotes.addNote(note);
@@ -160,7 +308,7 @@ function getNotes() {
                     if(chordNotes != null) {
                         firstChord = true;
                         addChord = false;
-                        if(chordNotes.getStaff === "1") {
+                        if(chordNotes.getStaff() === "1") {
                             //measureTrebleData.removeLast();
                             measureTrebleData.addChord(chordNotes);
                         }
@@ -169,13 +317,14 @@ function getNotes() {
                             measureBassData.addChord(chordNotes);
                             //console.log(measureBassData);
                         }
+                        chordNotes = null;
 
                     }
                     // Add normal notes and make sure you don't add the first note of a chord
-                    if(note.staff === "1" && nextNote.chord == false) {
+                    if(note.staff === "1" && nextNote.chord == false && note.chord == false) {
                         measureTrebleData.addNote(note);
                     }
-                    else if(note.staff === "2" && nextNote.chord == false) {
+                    else if(note.staff === "2" && nextNote.chord == false && note.chord == false) {
                         //console.log(note);
                         measureBassData.addNote(note);
                     }
@@ -194,7 +343,7 @@ function getNotes() {
             //console.log("__________________")
             // Check if it's the second note of the chord
             if(note.chord && firstChord) {
-                chordNotes = new Chord(prevNote);
+                chordNotes = new Chord(prevNote, prevNote.staff);
             }
             else if(note.chord) {
                 addChord = false;
@@ -332,7 +481,7 @@ class Note {
 // Class for a chord, stores all the notes in each chord
 class Chord {
     notes = [];
-    staff;
+    staff = "";
     constructor(note, staff) {
         this.staff = staff;
         this.notes.push(note);
@@ -349,7 +498,7 @@ class Chord {
         }
     }
     getStaff() {
-        return staff;
+        return this.staff;
     }
 
 
