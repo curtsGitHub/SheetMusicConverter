@@ -19,6 +19,8 @@ function createSheetMusic(trebleClef, bassClef) {
     //console.log(trebleClef);
     for(let i = 0; i < trebleClef.length; i++) {
         let newColumn = document.createElement("td");
+        let newMeasure = document.createElement("table");
+        newMeasure.className = "measure" + (i+1);
         let newDiv = document.createElement("table");
         newDiv.className = "measure" + (i+1);
         let currentDiv = document.getElementsByClassName("measures")[0];
