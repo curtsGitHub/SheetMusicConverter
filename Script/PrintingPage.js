@@ -230,6 +230,12 @@ function createSheetMusic(trebleClef, bassClef) {
                     tempoNotes.appendChild(tempoBlank);
                 }
                 let tempo = document.createElement("td");
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                console.log(trebleClef[i].notes[j].duration);
+                console.log(trebleClef[i].division);
+                console.log(trebleClef[i].notes[j].duration/trebleClef[i].division);
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
                 tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
                 currentNote.appendChild(newNote);
@@ -370,22 +376,22 @@ function createSheetMusic(trebleClef, bassClef) {
                 let currentNotes = bass.rows;
                 //let newNote = document.createElement("td");
                 if(bassClef[i].notes[j] instanceof Chord) {
-                    console.log(bassClef[i].notes[j].notes[1].note.length);
+                    //console.log(bassClef[i].notes[j].notes[1].note.length);
                     for(let m = 0; m < bassClef[i].notes[j].notes.length; m++) {
                         //console.log(currentNotes);
                         for(let k = 0; k < currentNotes.length; k++) {
-                            console.log(currentNotes[k].id + "HMHMHMHMHMHMHasduffgasgdfjhsgfdsfsgfysadfgy");
+                            //console.log(currentNotes[k].id + "HMHMHMHMHMHMHasduffgasgdfjhsgfdsfsgfysadfgy");
                             if(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave) {
-                                console.log("_____________________");
-                                console.log(bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave);
-                                console.log("_____________________");
+                                // console.log("_____________________");
+                                // console.log(bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave);
+                                // console.log("_____________________");
                                 currentNote = currentNotes[k];
-                                console.log(currentNote);
-                                    console.log(currentNotes[k].id);
-                                    console.log(bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave);
+                                // console.log(currentNote);
+                                //     console.log(currentNotes[k].id);
+                                //     console.log(bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave);
                                 
-                                    console.log(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave)
-                                    console.log("OMGGGGGGGGGGGGGGGGGGGGGG")
+                                //     console.log(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave)
+                                //     console.log("OMGGGGGGGGGGGGGGGGGGGGGG")
                                 break;
                                 // console.log("_______________");
                                 // console.log(currentNote);
@@ -504,11 +510,17 @@ function getNotes() {
     // let trebleClef = [];
     let measure = xmlDoc.getElementsByTagName("measure");
     xmlDoc.getElementsByTagName("measure");
-    
+    let attributes = xmlDoc.getElementsByTagName("attributes");
+    let division;
+    for(let i = 0; i < attributes[0].children.length; i++) {
+        if(attributes[0].children[i].nodeName === "divisions") {
+            division = attributes[0].children[i].innerHTML;
+        }
+    }
     // Go through each measure
     for(let k = 0; k < measure.length; k++) {
-        let measureTrebleData = new Measure("treble", k);
-        let measureBassData = new Measure("bass", k);
+        let measureTrebleData = new Measure("treble", k, division);
+        let measureBassData = new Measure("bass", k, division);
         let firstChord = true;
         let addChord = false;
         let chordNotes;
@@ -647,6 +659,7 @@ function getNote(node) {
     let rest = false;
     let type;
     let staff;
+    let duration;
     for(let j = 0; j < node.children.length; j++) {
         let currentNode = node.children[j];
         if(currentNode.nodeName === "chord") {
@@ -672,8 +685,11 @@ function getNote(node) {
         if(currentNode.nodeName === "staff") {
             staff = currentNode.innerHTML;
         }
+        if(currentNode.nodeName === "duration") {
+            duration = currentNode.innerHTML;
+        }
     }
-    note = new Note(note, alter, chord, rest, octave, type, staff);
+    note = new Note(note, alter, chord, rest, octave, type, staff, duration);
     return note;
 }
 
@@ -682,9 +698,11 @@ class Measure {
     notes = [];
     measureNum;
     staff;
-    constructor (staff, measureNum) {
+    division;
+    constructor (staff, measureNum, division) {
         this.staff = staff;
         this.measureNum = measureNum;
+        this.division = division;
     }
     addNote(note) {
         this.notes.push(note);
@@ -712,14 +730,16 @@ class Note {
     rest;
     type;
     staff;
-    constructor(note, alter, chord, rest, octave, type, staff) {
+    duration;
+    constructor(note, alter, chord, rest, octave, type, staff, duration) {
         this.octave = octave;
         this.note = note;
         this.alter = alter;
         this.chord = chord;
         this.type = type;
         this.rest = rest;
-        this.staff = staff
+        this.staff = staff;
+        this.duration = duration;
     }
 }
 
@@ -727,9 +747,11 @@ class Note {
 class Chord {
     notes = [];
     staff = "";
-    constructor(note, staff) {
+    duration;
+    constructor(note, staff, duration) {
         this.staff = staff;
         this.notes.push(note);
+        this.duration = note.duration;
     }
     addNote(note) {
         this.notes.push(note);
