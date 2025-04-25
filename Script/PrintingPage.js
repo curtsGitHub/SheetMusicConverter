@@ -211,10 +211,13 @@ function createSheetMusic(trebleClef, bassClef) {
                     alter.appendChild(data);
                 }
                 let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
+                let tempoLimit = currentNumNotes-tempoNotes.querySelectorAll("td").length;
                 for(let l = 0; l < limit; l++) {
                     let blankNote = document.createElement("td");
                     blankNote.textContent = "";
                     currentNote.appendChild(blankNote);
+                }
+                for(let l = 0; l < tempoLimit; l++) {
                     let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
                     tempoBlank.textContent = "";
                     tempoNotes.appendChild(tempoBlank);
@@ -222,10 +225,13 @@ function createSheetMusic(trebleClef, bassClef) {
                 if(trebleClef[i].notes[j].alter != 0) {
                     currentNote.appendChild(alter);
                     currentNumNotes++;
+                    let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
+                    tempoBlank.textContent = "";
+                    tempoNotes.appendChild(tempoBlank);
                 }
-                // let tempo = document.createElement("td");
-                // tempo.textContent = beatCount;
-                // tempoNotes.appendChild(tempo);
+                let tempo = document.createElement("td");
+                tempo.textContent = beatCount;
+                tempoNotes.appendChild(tempo);
                 currentNote.appendChild(newNote);
                 currentNumNotes++;
             }
