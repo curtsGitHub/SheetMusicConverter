@@ -19,6 +19,9 @@ table {
     border: 10px black;
 }
 
+.measures {
+    border-right: none;
+}
 .measures td {
     border-right: 2px solid black;
     border-bottom: 2px solid black;
@@ -27,6 +30,6 @@ table {
     border: none;
 
 }
-.bass {
-    border-top: 1px solid black;
-}
+.treble {
+    border-bottom: 1px solid black;
+} 
