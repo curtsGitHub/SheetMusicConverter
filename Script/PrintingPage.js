@@ -184,6 +184,14 @@ function createSheetMusic(trebleClef, bassClef) {
             }
             else if(trebleClef[i].notes[j].rest) {
                 //console.log(trebleClef[i].notes[j]);
+                console.log("||||||||||||||||||||||||||||||||||||||||||||")
+                console.log(beatCount);
+                console.log(trebleClef[i].notes[j]);
+                console.log(trebleClef[i].notes[j].duration);
+                console.log(trebleClef[i].division);
+                console.log(trebleClef[i].notes[j].duration/trebleClef[i].division);
+                console.log("|||||||||||||||||||||||||||||||||||||||||||")
+                beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
             }
             else {
                 //console.log(currentNotes);
@@ -231,11 +239,14 @@ function createSheetMusic(trebleClef, bassClef) {
                 }
                 let tempo = document.createElement("td");
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                console.log(trebleClef[i].notes[j]);
                 console.log(trebleClef[i].notes[j].duration);
                 console.log(trebleClef[i].division);
                 console.log(trebleClef[i].notes[j].duration/trebleClef[i].division);
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
+                if(trebleClef[i].notes[j].duration != null) {
+                    beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
+                }
                 tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
                 currentNote.appendChild(newNote);
