@@ -232,7 +232,7 @@ function createSheetMusic(trebleClef, bassClef) {
                 }
                 if(trebleClef[i].notes[j].alter != 0) {
                     currentNote.appendChild(alter);
-                    currentNumNotes+=10;
+                    currentNumNotes++;
                     let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
                     tempoBlank.textContent = "";
                     tempoNotes.appendChild(tempoBlank);
@@ -250,7 +250,7 @@ function createSheetMusic(trebleClef, bassClef) {
                 tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
                 currentNote.appendChild(newNote);
-                currentNumNotes+=10;
+                currentNumNotes++;
             }
                 //console.log(newNote);
                 //currentNote[0].appendChild(noteData);
@@ -421,7 +421,7 @@ function createSheetMusic(trebleClef, bassClef) {
                         }
                         currentNote.appendChild(newNote);
                     }
-                    currentNumNotes+=3;
+                    currentNumNotes++;
                 }
                 else if(bassClef[i].notes[j] == null || bassClef[i].notes[j].rest) {
                     //console.log(trebleClef[i].notes[j]);
@@ -447,7 +447,7 @@ function createSheetMusic(trebleClef, bassClef) {
                         currentNote.appendChild(blankNote);
                     }
                     currentNote.appendChild(newNote);
-                    currentNumNotes+=3;
+                    currentNumNotes++;
                 }
                     //console.log(newNote);
                     //currentNote[0].appendChild(noteData);
