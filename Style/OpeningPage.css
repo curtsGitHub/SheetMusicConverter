@@ -103,3 +103,9 @@ body {
     margin-bottom: 100px;
 
 }
+#fileInfo{
+    font-size: small;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 5px;
+}

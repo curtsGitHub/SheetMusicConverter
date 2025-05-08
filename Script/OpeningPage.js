@@ -1,10 +1,12 @@
 // --- File reader: Gets the file stores it ---
 let button = document.getElementById("submit");
 let file = document.getElementById("sheetMusic");
+let fileNew;
 let addFileButton = document.getElementById("addFile");
 let helpButton = document.getElementById("help");
 let closeHelpButton = document.getElementById("closeHelp");
 let helpBox = document.getElementById("helpBox")
+let fileInfo = document.getElementById("fileContent");
 
 // Get the <span> element that closes the modal
 let span = document.getElementsByClassName("close")[0];
@@ -34,7 +36,7 @@ addFileButton.addEventListener('click', function() {
   file.click();
 })
 file.addEventListener('change', (event) => {
-    file = event.target.files[0];
+    fileNew = event.target.files[0];
     const reader = new FileReader();
   
     reader.onload = (e) => {
@@ -48,13 +50,14 @@ file.addEventListener('change', (event) => {
       console.error('Error reading file:', e);
     };
     
-    reader.readAsText(file); // or readAsArrayBuffer, readAsDataURL
+    reader.readAsText(fileNew); // or readAsArrayBuffer, readAsDataURL
+    fileInfo.innerHTML = fileNew.name;
   });
 
-function readXML(file) {
+function readXML(fileNew) {
     const reader = new FileReader();
-    reader.readAsDataURL(file);
-    console.log(reader.readAsDataURL(file));
+    reader.readAsDataURL(fileNew);
+    console.log(reader.readAsDataURL(fileNew));
   }
 
 function getFile() {

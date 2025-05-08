@@ -33,3 +33,8 @@ table {
 .treble {
     border-bottom: 1px solid black;
 } 
+@media print {
+    body {
+      font-size: 10pt;
+    }
+  }
