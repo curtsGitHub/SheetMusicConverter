@@ -9,7 +9,9 @@ let trebleClef = [];
 button.addEventListener('click', function(){
     getCredits();
     getNotes();
+    findLongestMeasure();
     createSheetMusic(trebleClef, bassClef);
+    checkLength();
     console.log(trebleClef);
     console.log(bassClef);
 })
@@ -143,6 +145,7 @@ function createSheetMusic(trebleClef, bassClef) {
         numMeasures++;
         
         let currentNumNotes = 0;
+        let amountToAdd = 1;
         //console.log(document);
         let content;
         let beatCount = 0;
@@ -180,7 +183,7 @@ function createSheetMusic(trebleClef, bassClef) {
                     }
                     currentNote.appendChild(newNote);
                 }
-                currentNumNotes++;
+                currentNumNotes+=amountToAdd;
             }
             else if(trebleClef[i].notes[j].rest) {
                 //console.log(trebleClef[i].notes[j]);
@@ -232,7 +235,7 @@ function createSheetMusic(trebleClef, bassClef) {
                 }
                 if(trebleClef[i].notes[j].alter != 0) {
                     currentNote.appendChild(alter);
-                    currentNumNotes++;
+                    currentNumNotes+=amountToAdd;
                     let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
                     tempoBlank.textContent = "";
                     tempoNotes.appendChild(tempoBlank);
@@ -250,7 +253,7 @@ function createSheetMusic(trebleClef, bassClef) {
                 tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
                 currentNote.appendChild(newNote);
-                currentNumNotes++;
+                currentNumNotes+=amountToAdd;
             }
                 //console.log(newNote);
                 //currentNote[0].appendChild(noteData);
@@ -377,6 +380,7 @@ function createSheetMusic(trebleClef, bassClef) {
         bass.appendChild(note);
         
         let currentNumNotes = 0;
+        let amountToAdd = 1;
         //console.log(document);
         let content;
         // add the text node to the newly created div
@@ -421,7 +425,7 @@ function createSheetMusic(trebleClef, bassClef) {
                         }
                         currentNote.appendChild(newNote);
                     }
-                    currentNumNotes++;
+                    currentNumNotes+=amountToAdd;
                 }
                 else if(bassClef[i].notes[j] == null || bassClef[i].notes[j].rest) {
                     //console.log(trebleClef[i].notes[j]);
@@ -447,7 +451,7 @@ function createSheetMusic(trebleClef, bassClef) {
                         currentNote.appendChild(blankNote);
                     }
                     currentNote.appendChild(newNote);
-                    currentNumNotes++;
+                    currentNumNotes+=amountToAdd;
                 }
                     //console.log(newNote);
                     //currentNote[0].appendChild(noteData);
@@ -704,6 +708,29 @@ function getNote(node) {
     return note;
 }
 
+function findLongestMeasure() {
+    let longestMeasure = 0;
+    for(let i = 0; i < trebleClef.length; i++) {
+        if(trebleClef[i].notes.length > longestMeasure) {
+            longestMeasure = trebleClef[i].notes.length;
+        }
+    }
+    for(let i = 0; i < bassClef.length; i++) {
+        if(bassClef[i].notes.length > longestMeasure) {
+            longestMeasure = bassClef[i].notes.length;
+        }
+    }
+    
+    console.log(longestMeasure + " HOW");
+}
+
+function checkLength() {
+    let table = document.getElementById("start1");
+    console.log(table);
+    console.log("WIDTH");
+    console.log(table.rows[0].cells[0].offsetWidth);
+
+}
 // Class for a measure, stores all the notes in the measure
 class Measure {
     notes = [];
