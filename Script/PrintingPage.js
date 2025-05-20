@@ -9,7 +9,6 @@ let trebleClef = [];
 button.addEventListener('click', function(){
     getCredits();
     getNotes();
-    findLongestMeasure();
     createSheetMusic(trebleClef, bassClef);
     checkLength();
     console.log(trebleClef);
@@ -22,6 +21,8 @@ function createSheetMusic(trebleClef, bassClef) {
     let currentDiv = document.getElementsByClassName("measures")[0];
     let numMeasures = 0.0;
     let row1 = document.createElement("tr");
+    let amountToAdd = findLongestMeasure();
+    //let amountToAdd = 1;
     for(let i = 0; i < trebleClef.length; i++) {
         let newColumn = document.createElement("td");
         let newMeasure = document.createElement("table");
@@ -145,7 +146,6 @@ function createSheetMusic(trebleClef, bassClef) {
         numMeasures++;
         
         let currentNumNotes = 0;
-        let amountToAdd = 1;
         //console.log(document);
         let content;
         let beatCount = 0;
@@ -275,7 +275,6 @@ function createSheetMusic(trebleClef, bassClef) {
     }
 
     let rowNum = 0;
-    
     for(let i = 0; i < bassClef.length; i++) {
         let currentDiv = document.getElementsByClassName("measure" + (bassClef[i].measureNum+1));
         currentDiv[0].appendChild(document.createElement("tr"));
@@ -380,7 +379,6 @@ function createSheetMusic(trebleClef, bassClef) {
         bass.appendChild(note);
         
         let currentNumNotes = 0;
-        let amountToAdd = 1;
         //console.log(document);
         let content;
         // add the text node to the newly created div
@@ -720,15 +718,24 @@ function findLongestMeasure() {
             longestMeasure = bassClef[i].notes.length;
         }
     }
-    
     console.log(longestMeasure + " HOW");
+    let numSpaces = 1;
+    let numMeasures = 3;
+    let totalLength = numSpaces * longestMeasure * 16;
+    while(totalLength < 1247) {
+        console.log(totalLength + "YIPPEEE")
+        numSpaces++;
+        totalLength = numSpaces * longestMeasure * 16;
+    }
+    console.log(totalLength + "YIPPEEE")
+    return numSpaces;
 }
 
 function checkLength() {
     let table = document.getElementById("start1");
     console.log(table);
     console.log("WIDTH");
-    console.log(table.rows[0].cells[0].offsetWidth);
+    console.log(table.rows[0].offsetWidth);
 
 }
 // Class for a measure, stores all the notes in the measure
