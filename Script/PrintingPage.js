@@ -5,13 +5,12 @@ let title = "";
 let composer = "";
 let bassClef = [];
 let trebleClef = [];
-
+let numMeasures = 3;
 button.addEventListener('click', function(){
     getCredits();
     getNotes();
     createSheetMusic(trebleClef, bassClef);
     checkLength();
-    console.log(trebleClef);
     console.log(bassClef);
 })
 
@@ -19,9 +18,9 @@ button.addEventListener('click', function(){
 function createSheetMusic(trebleClef, bassClef) {
     //console.log(trebleClef);
     let currentDiv = document.getElementsByClassName("measures")[0];
-    let numMeasures = 0.0;
     let row1 = document.createElement("tr");
     let amountToAdd = findLongestMeasure();
+    let measureCount = 0;
     //let amountToAdd = 1;
     for(let i = 0; i < trebleClef.length; i++) {
         let newColumn = document.createElement("td");
@@ -31,9 +30,9 @@ function createSheetMusic(trebleClef, bassClef) {
         let newDiv = document.createElement("table");
         newDiv.className = "measure" + (i+1);
         newDiv.id = "measure";
-        console.log(numMeasures + " MEASURES");
-        console.log(numMeasures % 3);
-        if(numMeasures % 3 == 0) {
+        console.log(measureCount + " MEASURES");
+        console.log(measureCount % numMeasures);
+        if(measureCount % numMeasures == 0) {
             row1 = document.createElement("tr");
             currentDiv.appendChild(row1);
         }
@@ -49,6 +48,7 @@ function createSheetMusic(trebleClef, bassClef) {
         let treble = document.createElement("table");
         treble.className = "treble";
         data2.appendChild(treble);
+        console.log(newDiv.className + "SAVE");
 
         let note = document.createElement("tr");
         note.id = "firstTempo";
@@ -143,7 +143,7 @@ function createSheetMusic(trebleClef, bassClef) {
         note = document.createElement("tr");
         note.id = "b3";
         treble.appendChild(note);
-        numMeasures++;
+        measureCount++;
         
         let currentNumNotes = 0;
         //console.log(document);
@@ -277,11 +277,14 @@ function createSheetMusic(trebleClef, bassClef) {
     let rowNum = 0;
     for(let i = 0; i < bassClef.length; i++) {
         let currentDiv = document.getElementsByClassName("measure" + (bassClef[i].measureNum+1));
-        currentDiv[0].appendChild(document.createElement("tr"));
-        currentDiv[0].appendChild(document.createElement("tr"));
-        currentDiv[0].appendChild(document.createElement("tr"));
-        currentDiv[0].appendChild(document.createElement("tr"));
-        currentDiv[0].appendChild(document.createElement("tr"));
+        // currentDiv[0].appendChild(document.createElement("tr"));
+        // currentDiv[0].appendChild(document.createElement("tr"));
+        // currentDiv[0].appendChild(document.createElement("tr"));
+        // currentDiv[0].appendChild(document.createElement("tr"));
+        // currentDiv[0].appendChild(document.createElement("tr"));
+    console.log(trebleClef);
+        console.log(bassClef[i]);
+        console.log(bassClef[i].measureNum+1);
         let row = document.createElement("tr");
         currentDiv[0].appendChild(row);
         let data1 = document.createElement("td");
@@ -720,12 +723,16 @@ function findLongestMeasure() {
     }
     console.log(longestMeasure + " HOW");
     let numSpaces = 1;
-    let numMeasures = 3;
-    let totalLength = numSpaces * longestMeasure * 16;
-    while(totalLength < 1247) {
+    numMeasures = 3;
+    let totalLength = ( (numSpaces * 4) + longestMeasure * 18.15 ) * numMeasures;
+    while(totalLength > 600 && numMeasures > 1) {
+        numMeasures--;
+        totalLength = ( (numSpaces * 4) + longestMeasure * 18.15 ) * numMeasures;
+    }
+    while(totalLength < 500) {
         console.log(totalLength + "YIPPEEE")
         numSpaces++;
-        totalLength = numSpaces * longestMeasure * 16;
+        totalLength = ( (numSpaces * 4) + longestMeasure * 18.15 ) * numMeasures;
     }
     console.log(totalLength + "YIPPEEE")
     return numSpaces;
