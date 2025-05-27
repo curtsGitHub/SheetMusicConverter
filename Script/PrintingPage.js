@@ -22,6 +22,7 @@ function createSheetMusic(trebleClef, bassClef) {
     let row1 = document.createElement("tr");
     let amountToAdd = findLongestMeasure();
     let measureCount = 0;
+    let multiplier = findShortestNote();
     
     // Go through all of the measures in the treble clef
     for(let i = 0; i < trebleClef.length; i++) {
@@ -261,14 +262,11 @@ function createSheetMusic(trebleClef, bassClef) {
                 console.log(trebleClef[i].notes[j]);
                 console.log(trebleClef[i].notes[j].duration);
                 console.log(trebleClef[i].division);
-                console.log(trebleClef[i].notes[j].duration/trebleClef[i].division);
+                console.log(trebleClef[i].notes[j].duration/trebleClef[i].division + "SAVE ME PLEASEEE");
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                 if(trebleClef[i].notes[j].duration != null) { // Jump point
-                    if(trebleClef[i].notes[j].type === "quarter") {
-                        beatCount += .25;
-                    }
-                    beatCount += trebleClef[i].notes[j].type
-                    beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
+                    beatCount += typeToNumber(trebleClef[i].notes[j].type) * multiplier;
+                    //beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
                 }
                 tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
@@ -761,6 +759,9 @@ function findLongestMeasure() {
 function typeToNumber(type) {
     // WHEEEE
     let beat = 0;
+    if(type === "whole") {
+        beat = 1;
+    }
     if(type === "quarter") {
         beat = .25;
     }
@@ -773,7 +774,29 @@ function typeToNumber(type) {
     if(type === "16th") {
         beat = .0625;
     }
+
+    console.log(type + "SHORTED");
+    return beat;
 }
+
+function findShortestNote() {
+    let shortestBeat = 1000;
+    for(let i = 0; i < trebleClef.length; i++) {
+        for(let j = 0; j < trebleClef[i].notes.length; j++) {
+            if(typeToNumber(trebleClef[i].notes[j].type) < shortestBeat) {
+                shortestBeat = typeToNumber(trebleClef[i].notes[j].type);
+            }
+        }
+    }
+    console.log(shortestBeat +"SHORTED")
+    for(let i = 0; i < 16; i++) {
+        if(shortestBeat * i == 1) {
+            return i;
+        }
+    }
+    return 1;
+}
+
 function checkLength() {
     let table = document.getElementById("start1");
     console.log(table);
