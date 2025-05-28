@@ -867,7 +867,7 @@ function findShortestNote() {
             return i;
         }
     }
-    return 1;
+    return 16;
 }
 
 function checkLength() {
