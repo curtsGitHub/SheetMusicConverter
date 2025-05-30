@@ -190,6 +190,7 @@ function createSheetMusic(trebleClef, bassClef) {
                         if(currentNotes[k].id.toUpperCase() === trebleClef[i].notes[j].notes[m].note + "" + trebleClef[i].notes[j].notes[m].octave) {
                             console.log(trebleClef[i].notes[j].notes[m].note + "" + trebleClef[i].notes[j].notes[m].octave);
                             currentNote = currentNotes[k];
+                            tempoNotes = currentNotes[k-1];
                             // console.log("_______________"); DELETE
                             // console.log(currentNote); DELETE
                             // console.log(trebleClef[i].notes[j].note); DELETE
