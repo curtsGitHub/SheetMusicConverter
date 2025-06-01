@@ -153,6 +153,24 @@ function createSheetMusic(trebleClef, bassClef) {
         note = document.createElement("tr");
         note.id = "b3";
         treble.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "a3";
+        treble.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "g3";
+        treble.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "f3";
+        treble.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "e3";
+        treble.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "d3";
+        treble.appendChild(note);
+        note = document.createElement("tr");
+        note.id = "c3";
+        treble.appendChild(note);
         measureCount++;
         
         let currentNumNotes = 0;
@@ -171,6 +189,7 @@ function createSheetMusic(trebleClef, bassClef) {
             let tempoNotes = treble.rows[0];
             //let newNote = document.createElement("td"); DELETE
             // Go through chord notes to display them
+            let triggerOnce = true;
             if(trebleClef[i].notes[j] instanceof Chord) {
                 let isAlter = false;
                 console.log(trebleClef[i].notes[j].notes + " WOWOWOWOWOWOWOO"); // DELETE
@@ -223,7 +242,10 @@ function createSheetMusic(trebleClef, bassClef) {
                     if(trebleClef[i].notes[j].notes[m].alter != 0) {
                         console.log(trebleClef[i].notes[j].notes[m].alter + "KMSKMS");
                         currentNote.appendChild(alter);
-                        currentNumNotes++;
+                        if(triggerOnce) {
+                            currentNumNotes++;
+                            triggerOnce = false;
+                        }
                         // let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
                         // tempoBlank.textContent = "";
                         // tempoNotes.appendChild(tempoBlank);
@@ -810,17 +832,18 @@ function findLongestMeasure() {
     console.log(longestMeasure + " HOW");
     let numSpaces = 1;
     numMeasures = 3;
-    let totalLength = ( (numSpaces * 4) + longestMeasure * 18.15 ) * numMeasures;
-    while(totalLength > 600 && numMeasures > 1) {
+    let totalLength = ( (numSpaces * longestMeasure * 2) + longestMeasure * 12.67 ) * numMeasures;
+    while(totalLength > 500 && numMeasures > 1) {
         numMeasures--;
-        totalLength = ( (numSpaces * 4) + longestMeasure * 18.15 ) * numMeasures;
+        totalLength = ( (numSpaces * longestMeasure * 2) + longestMeasure * 12.67 ) * numMeasures;
     }
-    while(totalLength < 500) {
+    while(totalLength < 400) {
         console.log(totalLength + "YIPPEEE")
         numSpaces++;
-        totalLength = ( (numSpaces * 4) + longestMeasure * 18.15 ) * numMeasures;
+        totalLength = ( (numSpaces * longestMeasure * 2) + longestMeasure * 12.67 ) * numMeasures;
     }
     console.log(totalLength + "YIPPEEE")
+    console.log(totalLength + "WIDTH")
     return numSpaces;
 }
 
@@ -843,7 +866,7 @@ function typeToNumber(type) {
         beat = .0625;
     }
     else {
-        console.log(type + "wydm");
+        console.log(1 + "wydm");
     }
 
     console.log(type + "SHORTED");
@@ -873,9 +896,9 @@ function findShortestNote() {
 
 function checkLength() {
     let table = document.getElementById("start1");
-    console.log(table);
-    console.log("WIDTH");
-    console.log(table.rows[0].offsetWidth);
+    // console.log(table);
+    // console.log("WIDTH");
+    // console.log(table.rows[22].offsetWidth);
 
 }
 // Class for a measure, stores all the notes in the measure
