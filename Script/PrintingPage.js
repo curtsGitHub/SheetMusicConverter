@@ -21,6 +21,7 @@ function createSheetMusic(trebleClef, bassClef) {
     let currentDiv = document.getElementsByClassName("measures")[0];
     let row1 = document.createElement("tr");
     let amountToAdd = findLongestMeasure();
+    // let amountToAdd = 1;
     let measureCount = 0;
     let multiplier = findShortestNote();
     console.log(multiplier + "multi")
@@ -938,18 +939,19 @@ function findLongestMeasure() {
     console.log(measureNum + "HOW");
     let numSpaces = 1;
     numMeasures = 3;
-    let totalLength = ( (numSpaces * longestMeasure * 2) + longestMeasure * 12.67 ) * numMeasures;
+    let totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
     while(totalLength > 620 && numMeasures > 1) {
         numMeasures--;
-        totalLength = ( (numSpaces * longestMeasure * 2) + longestMeasure * 12.67 ) * numMeasures;
+        totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
     }
     while(totalLength < 600) {
         console.log(totalLength + "YIPPEEE")
         numSpaces++;
-        totalLength = ( (numSpaces * longestMeasure * 2) + longestMeasure * 12.67 ) * numMeasures;
+        totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
     }
     console.log(totalLength + "YIPPEEE")
     console.log(totalLength + "WIDTH")
+    console.log(numSpaces + "SAVE NE")
     return numSpaces;
 }
 
@@ -1007,7 +1009,7 @@ function checkLength() {
     let table = document.getElementById("start1");
     // console.log(table);
     // console.log("WIDTH");
-    // console.log(table.rows[22].offsetWidth);
+    console.log(table.rows[0].cells[0].rows[0].cells[0] + "WIDTH");
 
 }
 // Class for a measure, stores all the notes in the measure
