@@ -6,18 +6,18 @@ let composer = "";
 let bassClef = [];
 let trebleClef = [];
 let numMeasures = 3;
+
+// When they click show file run!!
 button.addEventListener('click', function(){
     getCredits();
     getNotes();
     console.log(trebleClef);
     console.log(bassClef);
     createSheetMusic(trebleClef, bassClef);
-    checkLength();
 })
 
 // Creates the html file that will be printed
 function createSheetMusic(trebleClef, bassClef) {
-    //console.log(trebleClef); DELETE
     let currentDiv = document.getElementsByClassName("measures")[0];
     let row1 = document.createElement("tr");
     let amountToAdd = findLongestMeasure();
@@ -37,8 +37,8 @@ function createSheetMusic(trebleClef, bassClef) {
         let newDiv = document.createElement("table");
         newDiv.className = "measure" + (i+1);
         newDiv.id = "measure";
-        console.log(measureCount + " MEASURES");
-        console.log(measureCount % numMeasures);
+        console.log(measureCount + " MEASURES");// delete
+        console.log(measureCount % numMeasures);// delete
 
         // Splits the amount of measures up per row
         if(measureCount % numMeasures == 0) {
@@ -48,7 +48,6 @@ function createSheetMusic(trebleClef, bassClef) {
         let data1 = document.createElement("td");
         row1.appendChild(data1);
         
-        //console.log(currentDiv); DELETE
         // Split the measures up into treble and base clef
         data1.appendChild(newDiv);
         let row2 = document.createElement("tr");
@@ -58,9 +57,9 @@ function createSheetMusic(trebleClef, bassClef) {
         let treble = document.createElement("table");
         treble.className = "treble";
         data2.appendChild(treble);
-        console.log(newDiv.className + "SAVE"); // DELETE
+        console.log(newDiv.className + "SAVE");
 
-        // Add all of the note options for the measure
+        // Add all of the note options for the measure as rows
         let note = document.createElement("tr");
         note.id = "firstTempo";
         treble.appendChild(note);
@@ -176,24 +175,21 @@ function createSheetMusic(trebleClef, bassClef) {
         
         let currentNumNotes = 0;
         let limitCurrentNotes = 0;
-        //console.log(document); DELETE
         let content;
         let beatCount = 0;
 
         // Go through all the notes in that measure
         for(let j = 0; j < trebleClef[i].notes.length; j++) {
             limitCurrentNotes = currentNumNotes;
-            //console.log(trebleClef[i].notes[j].rest); DELETE
-            //console.log(newDiv); DELETE
             let currentNote = treble.rows[0];
             let currentNotes = treble.rows;
             let tempoNotes = treble.rows[0];
-            //let newNote = document.createElement("td"); DELETE
-            // Go through chord notes to display them
             let triggerOnce = true;
+
+            // If the note is a chord, there is a special way to display them
             if(trebleClef[i].notes[j] instanceof Chord) {
                 let isAlter = false;
-                // Add all the notes 
+                // Find if there is a sharp or flat in the chord
                 for(let m = 0; m < trebleClef[i].notes[j].notes.length; m++) {
                     if(trebleClef[i].notes[j].notes[m].alter == -1) {
                         isAlter = true;
@@ -202,19 +198,16 @@ function createSheetMusic(trebleClef, bassClef) {
                         isAlter = true;
                     }
                 }
+                // Go through the notes in the chords
                 for(let m = 0; m < trebleClef[i].notes[j].notes.length; m++) {
-                    //console.log(currentNotes); DELETE
                     // Find the note to add and find the row to add it in
                     for(let k = 0; k < currentNotes.length; k++) {
                         if(currentNotes[k].id.toUpperCase() === trebleClef[i].notes[j].notes[m].note + "" + trebleClef[i].notes[j].notes[m].octave) {
                             currentNote = currentNotes[k];
                             tempoNotes = currentNotes[k-1];
-                            // console.log("_______________"); DELETE
-                            // console.log(currentNote); DELETE
-                            // console.log(trebleClef[i].notes[j].note); DELETE
                         }
                     }
-                    
+                    // Set up the sharp/flat
                     let alter = document.createElement("td");
                     let data;
                     if(trebleClef[i].notes[j].notes[m].alter == -1) {
@@ -225,10 +218,9 @@ function createSheetMusic(trebleClef, bassClef) {
                         data = document.createTextNode("♯")
                         alter.appendChild(data);
                     }
-                    // Add the note
+                    // Set up the note
                     let newNote = document.createElement("td");
                     let noteData = document.createTextNode(trebleClef[i].notes[j].notes[m].note);
-                    //console.log(noteData); DELETE
                     newNote.appendChild(noteData);
                     // Add proper spacing
                     let limit = limitCurrentNotes-currentNote.querySelectorAll("td").length;
@@ -237,48 +229,49 @@ function createSheetMusic(trebleClef, bassClef) {
                         blankNote.textContent = "";
                         currentNote.appendChild(blankNote);
                     }
+                    // Add the sharp/flat
                     if(trebleClef[i].notes[j].notes[m].alter != 0) {
                         currentNote.appendChild(alter);
+                        
+                        // This will cause the tempo number to be shifted one
                         if(triggerOnce) {
                             currentNumNotes++;
                             triggerOnce = false;
                         }
-                        // let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
-                        // tempoBlank.textContent = "";
-                        // tempoNotes.appendChild(tempoBlank);
                     }
+                    // If the chord had a sharp/flat, shift all of the other notes one to match that note
                     if(isAlter && trebleClef[i].notes[j].notes[m].alter == 0) {
                         let blankNote = document.createElement("td");
                         blankNote.textContent = "";
                         currentNote.appendChild(blankNote);
                         
                     }
-                    // if(isAlter) {
-                    //     console.log(trebleClef[i].notes[j].notes[m].note + "heheheee");
-                    //     let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
-                    //     tempoBlank.textContent = "";
-                    //     tempoNotes.appendChild(tempoBlank);
-                    // }
                     currentNote.appendChild(newNote);
                 }
+                // Add the spacing for the tempo note at the note above the top note of the chord
                 let tempoLimit = currentNumNotes-tempoNotes.querySelectorAll("td").length;
                 for(let l = 0; l < tempoLimit; l++) {
                     let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
                     tempoBlank.textContent = "";
                     tempoNotes.appendChild(tempoBlank);
                 }
+                // Set up the tempo number
                 let tempo = document.createElement("td");
                 if(trebleClef[i].notes[j].type != null) { // Jump point
-                    console.log("hehehee. " + trebleClef[i].notes[j].type);
+                    console.log("hehehee. " + trebleClef[i].notes[j].type); // Delete
+                    // Find the type of the beat and convert it into its number form
+                    // Then multiply it by a multiplier to end with a whole number
                     beatCount += typeToNumber(trebleClef[i].notes[j].type) * multiplier;
                     //beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
                 }
                 else {
-                    console.log("hehehee.;-;; " + trebleClef[i].notes[j].duration);
-                    console.log("hehehee.;-; " + trebleClef[i].division);
+                    console.log("hehehee.;-;; " + trebleClef[i].notes[j].duration); // delete
+                    console.log("hehehee.;-; " + trebleClef[i].division); // delete
+                    // If it doesn't have a type, find it with divisions and durations
                     beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division * multiplier;
                 }
                 
+                // Add the tempo number
                 tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
                 currentNumNotes+=amountToAdd;
@@ -286,22 +279,24 @@ function createSheetMusic(trebleClef, bassClef) {
             // Account for rest notes
             else if(trebleClef[i].notes[j].rest) {
                 //console.log(trebleClef[i].notes[j]); DELETE
+                // Add it to the beat count
                 if(trebleClef[i].notes[j].type != null) { // Jump point
                     beatCount += typeToNumber(trebleClef[i].notes[j].type) * multiplier;
-                    //beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
+                    //beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;// delete
                 }
                 else {
-                    console.log("||||||||||||||||||||||||||||||||||||||||||||")
-                    console.log(beatCount);
-                    console.log(trebleClef[i].notes[j]);
-                    console.log(trebleClef[i].notes[j].duration);
-                    console.log(trebleClef[i].division);
-                    console.log(trebleClef[i].notes[j].duration/trebleClef[i].division);
-                    console.log(trebleClef[i].notes[j].duration/trebleClef[i].notes[j].division * multiplier);
-                    console.log("|||||||||||||||||||||||||||||||||||||||||||")
+                    console.log("||||||||||||||||||||||||||||||||||||||||||||")// delete
+                    console.log(beatCount);// delete
+                    console.log(trebleClef[i].notes[j]);// delete
+                    console.log(trebleClef[i].notes[j].duration);// delete
+                    console.log(trebleClef[i].division);// delete
+                    console.log(trebleClef[i].notes[j].duration/trebleClef[i].division);// delete
+                    console.log(trebleClef[i].notes[j].duration/trebleClef[i].notes[j].division * multiplier);// delete
+                    console.log("|||||||||||||||||||||||||||||||||||||||||||")// delete
                     beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division * multiplier;
                 }
             }
+            // Normal notes
             else {
                 //console.log(currentNotes); DELETE
                 // Find the note to add
@@ -315,10 +310,13 @@ function createSheetMusic(trebleClef, bassClef) {
                     }
                 }
                 
+                // Set up the note
                 let newNote = document.createElement("td");
                 let noteData = document.createTextNode(trebleClef[i].notes[j].note);
                 //console.log(noteData);
                 newNote.appendChild(noteData);// jumppoint
+
+                // Set up the sharp/flat
                 let alter = document.createElement("td");
                 let data;
                 if(trebleClef[i].notes[j].alter == -1) {
@@ -329,6 +327,8 @@ function createSheetMusic(trebleClef, bassClef) {
                     data = document.createTextNode("♯")
                     alter.appendChild(data);
                 }
+
+                // Correctly space both the tempo and the note
                 let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
                 let tempoLimit = currentNumNotes-tempoNotes.querySelectorAll("td").length;
                 for(let l = 0; l < limit; l++) {
@@ -337,21 +337,26 @@ function createSheetMusic(trebleClef, bassClef) {
                     currentNote.appendChild(blankNote);
                 }
                 for(let l = 0; l < tempoLimit; l++) {
-                    let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
+                    let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT // delete
                     tempoBlank.textContent = "";
                     tempoNotes.appendChild(tempoBlank);
                 }
+
+                // Add the sharp/flat
                 if(trebleClef[i].notes[j].alter != 0) {
                     currentNote.appendChild(alter);
                     currentNumNotes+=amountToAdd;
-                    let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
+                    // Add another space for the tempo to properly line up
+                    let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT// delete
                     tempoBlank.textContent = "";
                     tempoNotes.appendChild(tempoBlank);
                 }
+
+                // Set up the tempo number
                 let tempo = document.createElement("td");
                 if(trebleClef[i].notes[j].type != null) { // Jump point
                     beatCount += typeToNumber(trebleClef[i].notes[j].type) * multiplier;
-                    //beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;
+                    //beatCount += trebleClef[i].notes[j].duration/trebleClef[i].division;// delete
                 }
                 else {
                     beatCount += trebleClef[i].notes[j].duration/trebleClef[i].notes[j].division * multiplier;
@@ -361,36 +366,17 @@ function createSheetMusic(trebleClef, bassClef) {
                 currentNote.appendChild(newNote);
                 currentNumNotes+=amountToAdd;
             }
-                //console.log(newNote);
-                //currentNote[0].appendChild(noteData);
-                //console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
-                // console.log(currentNote.querySelectorAll("td").length);
-                // console.log(currentNumNotes);
-                // console.log(currentNote);
-                // let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
-                // for(let l = 0; l < limit; l++) {
-                //     let blankNote = document.createElement("td");
-                //     blankNote.textContent = "";
-                //     currentNote.appendChild(blankNote);
-                // }
-                // currentNote.appendChild(newNote);
-                // currentNumNotes++;
-                //console.log(trebleClef[i].notes[j].note);
         }
-        // console.log(trebleClef[i].notes[j].note);
     }
 
+    // Display bass clef notes
     let rowNum = 0;
     for(let i = 0; i < bassClef.length; i++) {
+        // Set up the bass clef in the measure
         let currentDiv = document.getElementsByClassName("measure" + (bassClef[i].measureNum+1));
-        // currentDiv[0].appendChild(document.createElement("tr"));
-        // currentDiv[0].appendChild(document.createElement("tr"));
-        // currentDiv[0].appendChild(document.createElement("tr"));
-        // currentDiv[0].appendChild(document.createElement("tr"));
-        // currentDiv[0].appendChild(document.createElement("tr"));
         let row = document.createElement("tr");
-        console.log(bassClef[i].measureNum+1 + "u exist");
-        console.log(currentDiv[0]);
+        console.log(bassClef[i].measureNum+1 + "u exist");// delete
+        console.log(currentDiv[0]);// delete
         currentDiv[0].appendChild(row);
         let data1 = document.createElement("td");
         row.appendChild(data1);
@@ -398,6 +384,7 @@ function createSheetMusic(trebleClef, bassClef) {
         bass.className = "bass";
         data1.appendChild(bass);
 
+        // Set up the notes for the measure as rows
         let note = document.createElement("tr");
         note.id = "a6";
         bass.appendChild(note);
@@ -523,143 +510,123 @@ function createSheetMusic(trebleClef, bassClef) {
         bass.appendChild(note);
         
         let currentNumNotes = 0;
-        //console.log(document);
         let content;
-        // add the text node to the newly created div
-            for(let j = 0; j < bassClef[i].notes.length; j++) {
-                //console.log(trebleClef[i].notes[j].rest);
-                //console.log(newDiv);
-                let currentNote = bass.rows[0];
-                let currentNotes = bass.rows;
-                //let newNote = document.createElement("td");
-                if(bassClef[i].notes[j] instanceof Chord) {
-                    //console.log(bassClef[i].notes[j].notes[1].note.length);
-                    let isAlter = false;
-                    // Add all the notes 
-                    for(let m = 0; m < bassClef[i].notes[j].notes.length; m++) {
-                        if(bassClef[i].notes[j].notes[m].alter == -1) {
-                            isAlter = true;
-                        }
-                        else if(bassClef[i].notes[j].notes[m].alter == 1) {
-                            isAlter = true;
-                        }
+        // Go through all of the notes in the bass clef
+        for(let j = 0; j < bassClef[i].notes.length; j++) {
+            let currentNote = bass.rows[0];
+            let currentNotes = bass.rows;
+            //let newNote = document.createElement("td");// delete
+            // Format the notes if its a chord
+            if(bassClef[i].notes[j] instanceof Chord) {
+                //console.log(bassClef[i].notes[j].notes[1].note.length);// delete
+                let isAlter = false;
+                // Check if there are sharps/flats in the bass clef
+                for(let m = 0; m < bassClef[i].notes[j].notes.length; m++) {
+                    if(bassClef[i].notes[j].notes[m].alter == -1) {
+                        isAlter = true;
                     }
-                    for(let m = 0; m < bassClef[i].notes[j].notes.length; m++) {
-                        
-                        //console.log(currentNotes);
-                        for(let k = 0; k < currentNotes.length; k++) { 
-                            //console.log(currentNotes[k].id + "HMHMHMHMHMHMHasduffgasgdfjhsgfdsfsgfysadfgy");
-                            if(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave) {
-                                // console.log("_____________________");
-                                // console.log(bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave);
-                                // console.log("_____________________");
-                                currentNote = currentNotes[k];
-                                // console.log(currentNote);
-                                //     console.log(currentNotes[k].id);
-                                //     console.log(bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave);
-                                
-                                //     console.log(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave)
-                                //     console.log("OMGGGGGGGGGGGGGGGGGGGGGG")
-                                break;
-                                // console.log("_______________");
-                                // console.log(currentNote);
-                                // console.log(trebleClef[i].notes[j].note);
-                            }
-                        }
-                        let alter = document.createElement("td");
-                        let data;
-                        if(bassClef[i].notes[j].notes[m].alter == -1) {
-                            data = document.createTextNode("♭")
-                            alter.appendChild(data);
-                        }
-                        else if(bassClef[i].notes[j].notes[m].alter == 1) {
-                            data = document.createTextNode("♯")
-                            alter.appendChild(data);
-                        }
+                    else if(bassClef[i].notes[j].notes[m].alter == 1) {
+                        isAlter = true;
+                    }
+                }
 
-                        let newNote = document.createElement("td");
-                        let noteData = document.createTextNode(bassClef[i].notes[j].notes[m].note);
-                        //console.log(noteData);
-                        newNote.appendChild(noteData);
-                        let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
-                        for(let l = 0; l < limit; l++) {
-                            let blankNote = document.createElement("td");
-                            blankNote.textContent = "";
-                            currentNote.appendChild(blankNote);
-                        }
-                        if(bassClef[i].notes[j].notes[m].alter != 0) {
-                            currentNote.appendChild(alter);
-                            // let tempoBlank = document.createElement("td"); // MAYBE CHANGE IT
-                            // tempoBlank.textContent = "";
-                            // tempoNotes.appendChild(tempoBlank);
-                        }
-                        if(isAlter && bassClef[i].notes[j].notes[m].alter == 0) {
-                            let blankNote = document.createElement("td");
-                            blankNote.textContent = "";
-                            currentNote.appendChild(blankNote);
-                            
-                        }
-                        currentNote.appendChild(newNote);
-                    }
-                    currentNumNotes+=amountToAdd;
-                }
-                else if(bassClef[i].notes[j] == null || bassClef[i].notes[j].rest) {
-                    //console.log(trebleClef[i].notes[j]);
-                }
-                else {// jumppoint
-                    //console.log(currentNotes);
-                    for(let k = 0; k < currentNotes.length; k++) {
-                        if(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].note + "" + bassClef[i].notes[j].octave) {
+                // Iterate through the notes in the chord and find the row it matches
+                for(let m = 0; m < bassClef[i].notes[j].notes.length; m++) {
+                    for(let k = 0; k < currentNotes.length; k++) { 
+                        if(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].notes[m].note + "" + bassClef[i].notes[j].notes[m].octave) {
                             currentNote = currentNotes[k];
-                            // console.log("_______________");
-                            // console.log(currentNote);
-                            // console.log(trebleClef[i].notes[j].note);
+                            break;
                         }
                     }
-                    let newNote = document.createElement("td");
-                    let noteData = document.createTextNode(bassClef[i].notes[j].note);
-                    //console.log(noteData);
-                    newNote.appendChild(noteData);
+
+                    // Set up sharp/flat
                     let alter = document.createElement("td");
                     let data;
-                    if(bassClef[i].notes[j].alter == -1) {
+                    if(bassClef[i].notes[j].notes[m].alter == -1) {
                         data = document.createTextNode("♭")
                         alter.appendChild(data);
                     }
-                    else if(bassClef[i].notes[j].alter == 1) {
+                    else if(bassClef[i].notes[j].notes[m].alter == 1) {
                         data = document.createTextNode("♯")
                         alter.appendChild(data);
                     }
+
+                    // Set up note
+                    let newNote = document.createElement("td");
+                    let noteData = document.createTextNode(bassClef[i].notes[j].notes[m].note);
+                    newNote.appendChild(noteData);
+
+                    // Add proper spacing
                     let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
                     for(let l = 0; l < limit; l++) {
                         let blankNote = document.createElement("td");
                         blankNote.textContent = "";
                         currentNote.appendChild(blankNote);
                     }
-                    if(bassClef[i].notes[j].alter != 0) {
+
+                    // Add sharp/flat
+                    if(bassClef[i].notes[j].notes[m].alter != 0) {
                         currentNote.appendChild(alter);
-                        currentNumNotes+=amountToAdd;
+                    }
+
+                    // Update spacing for the rest of the notes if there is an alter
+                    if(isAlter && bassClef[i].notes[j].notes[m].alter == 0) {
+                        let blankNote = document.createElement("td");
+                        blankNote.textContent = "";
+                        currentNote.appendChild(blankNote);
+                        
                     }
                     currentNote.appendChild(newNote);
+                }
+                currentNumNotes+=amountToAdd;
+            }
+            else if(bassClef[i].notes[j] == null || bassClef[i].notes[j].rest) {
+                // To make sure it doesn't crash
+            }
+            // Display normal notes
+            else {// jumppoint// delete
+
+                // Find the note's row
+                for(let k = 0; k < currentNotes.length; k++) {
+                    if(currentNotes[k].id.toUpperCase() === bassClef[i].notes[j].note + "" + bassClef[i].notes[j].octave) {
+                        currentNote = currentNotes[k];
+                    }
+                }
+
+                // Set up the note
+                let newNote = document.createElement("td");
+                let noteData = document.createTextNode(bassClef[i].notes[j].note);
+                newNote.appendChild(noteData);
+
+                // Set up the alter
+                let alter = document.createElement("td");
+                let data;
+                if(bassClef[i].notes[j].alter == -1) {
+                    data = document.createTextNode("♭")
+                    alter.appendChild(data);
+                }
+                else if(bassClef[i].notes[j].alter == 1) {
+                    data = document.createTextNode("♯")
+                    alter.appendChild(data);
+                }
+
+                // Make proper spacing
+                let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
+                for(let l = 0; l < limit; l++) {
+                    let blankNote = document.createElement("td");
+                    blankNote.textContent = "";
+                    currentNote.appendChild(blankNote);
+                }
+
+                // Add alter
+                if(bassClef[i].notes[j].alter != 0) {
+                    currentNote.appendChild(alter);
                     currentNumNotes+=amountToAdd;
                 }
-                    //console.log(newNote);
-                    //currentNote[0].appendChild(noteData);
-                    //console.log(document.getElementsByClassName("measure" + (i + 1))[0]);
-                    // console.log(currentNote.querySelectorAll("td").length);
-                    // console.log(currentNumNotes);
-                    // console.log(currentNote);
-                    // let limit = currentNumNotes-currentNote.querySelectorAll("td").length;
-                    // for(let l = 0; l < limit; l++) {
-                    //     let blankNote = document.createElement("td");
-                    //     blankNote.textContent = "";
-                    //     currentNote.appendChild(blankNote);
-                    // }
-                    // currentNote.appendChild(newNote);
-                    // currentNumNotes++;
-                    //console.log(trebleClef[i].notes[j].note);
+                currentNote.appendChild(newNote);
+                currentNumNotes+=amountToAdd;
             }
-        // console.log(trebleClef[i].notes[j].note);
+        }
     }
 
     console.log(document);
@@ -705,23 +672,25 @@ function getCredits() {
 
 // Gets the measures data
 function getNotes() {
+    // Set up
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(sessionStorage.getItem("file"), "text/xml");
     let notes = [];
     let measureCount = 1;
     let measures = [];
     let prevNote = new Note();
-    // let bassClef = [];
-    // let trebleClef = [];
     let measure = xmlDoc.getElementsByTagName("measure");
     xmlDoc.getElementsByTagName("measure");
     let attributes = xmlDoc.getElementsByTagName("attributes");
     let division;
+
+    // Get the divisions
     for(let i = 0; i < attributes[0].children.length; i++) {
         if(attributes[0].children[i].nodeName === "divisions") {
             division = attributes[0].children[i].innerHTML;
         }
     }
+
     // Go through each measure
     for(let k = 0; k < measure.length; k++) {
         let measureTrebleData = new Measure("treble", k, division);
@@ -730,11 +699,10 @@ function getNotes() {
         let addChord = false;
         let chordNotes;
         let atleastTreble = false;
-        //console.log(measure[k]);
+        
         // Go through each note
         for(let i = 0; i < measure[k].children.length-1; i++) {
-            //console.log(i);
-            //console.log(measure[0].children[i].nodeName);
+            
             // Extract the note, the octave, sharps/flats, if its a rest and if it's a chord
             if(measure[k].children[i].nodeName === "note") {
                 let note = getNote(measure[k].children[i]);
@@ -750,21 +718,17 @@ function getNotes() {
                     chordNotes.addNote(note);
                 }
                 else {
-                    //console.log(chordNotes)
-                    //console.log(note);
+                    
                     // If there is a chord, add it and reset chord flags
                     if(chordNotes != null) {
                         firstChord = true;
                         addChord = false;
                         if(chordNotes.getStaff() === "1") {
                             atleastTreble = true;
-                            //measureTrebleData.removeLast();
                             measureTrebleData.addChord(chordNotes);
                         }
                         else {
-                            //measureBassData.removeLast();
                             measureBassData.addChord(chordNotes);
-                            //console.log(measureBassData);
                         }
                         chordNotes = null;
 
@@ -775,22 +739,17 @@ function getNotes() {
                         measureTrebleData.addNote(note);
                     }
                     else if(note.staff === "2" && nextNote.chord == false && note.chord == false) {
-                        //console.log(note);
                         measureBassData.addNote(note);
                     }
                 }
                 prevNote = note;
-                //measureData.addNote(new Note(note, alter, chord, rest, octave, type, staff));
-                //console.log(measureData);
             }
         }
         // Check the note that you're missing because you look at the next note so you have to add
         // a bound
         if(measure[k].children[measure[k].children.length-1].nodeName === "note") {
             let note = getNote(measure[k].children[measure[k].children.length-1]);
-            //console.log("WOW")
-            //console.log(measureBassData);
-            //console.log("__________________")
+
             // Check if it's the second note of the chord
             if(note.chord && firstChord) {
                 chordNotes = new Chord(prevNote, prevNote.staff);
@@ -820,9 +779,6 @@ function getNotes() {
         }
         // Add the newly added chord
         if(chordNotes != null && addChord == true) {
-            //console.log("ADDED NOTES");
-            //console.log(k);
-            //console.log(addChord)
             if(chordNotes.notes[0].staff === "1") {
                 atleastTreble = true;
                 measureTrebleData.addChord(chordNotes);
@@ -830,8 +786,10 @@ function getNotes() {
             else if(chordNotes.notes[0].staff === "2") {
                 measureBassData.addChord(chordNotes)
             }
-            //console.log(measureBassData);
         }
+
+        // Make sure there is at least one note in the measure for treble clef
+        // Treble clef starts each measure so there needs to be at least one
         if(!atleastTreble) {
             measureTrebleData.addNote(new Note(null,null,null,true,null,null,"1",1));
         }
@@ -843,25 +801,13 @@ function getNotes() {
         if(measureBassData != null && measureBassData.notes.length != 0) {
             bassClef.push(measureBassData);
         }
-        //measures.push(measureData);
+        
     }
-    //console.log(measures);
-    //return bassClef;
-    // console.log(notes.length);
-    // for(let i = 0; i < notes.length; i++) {
-    //     console.log(notes[i][0]);
-    // }
-    // console.log(measure);
-    // let note = measure.childNodes[0];
-    // console.log(note);
-    // let pitch = note.childNodes;
-    // noteData.push(pitch[0].childNodes);
-    // notes.push(noteData);
-    // console.log(notes[0][0]);
 }
 
 // Gets the note data
 function getNote(node) {
+    // All the info set up
     let note;
     let alter = 0;
     let octave;
@@ -870,11 +816,12 @@ function getNote(node) {
     let type;
     let staff;
     let duration;
+
+    // Go through the note's children to extract data
     for(let j = 0; j < node.children.length; j++) {
         let currentNode = node.children[j];
         if(currentNode.nodeName === "chord") {
             chord = true;
-            //console.log(measure[k].children[i]);
         }
         if(currentNode.nodeName === "rest") {
             rest = true;
@@ -899,14 +846,19 @@ function getNote(node) {
             duration = currentNode.innerHTML;
         }
     }
+
+    // Add it all to a note
     note = new Note(note, alter, chord, rest, octave, type, staff, duration);
     return note;
 }
 
+// Find the proper spacing to consistantly print at good margins and no cutoffs
 function findLongestMeasure() {
     let longestMeasure = 0;
     let longestCount = 0;
     let measureNum = 0;
+
+    // Find the widest measure and the number of notes in it
     for(let i = 0; i < trebleClef.length; i++) {
         let count = 0;
         for(let j = 0; j < trebleClef[i].notes.length; j++) {
@@ -935,26 +887,30 @@ function findLongestMeasure() {
             measureNum = bassClef[i].measureNum;
         }
     }
-    console.log(longestMeasure + " HOW");
-    console.log(measureNum + "HOW");
+    console.log(longestMeasure + " HOW");// delete
+    console.log(measureNum + "HOW");// delete
+
+    // Calculate the width of the whole table to see if it fits the printing requirements
     let numSpaces = 1;
     numMeasures = 3;
     let totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
+
+    // If it's too wide initially, it will change the number of measures per row
     while(totalLength > 620 && numMeasures > 1) {
         numMeasures--;
         totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
     }
+
+    // Change the number of spaces to fit it
     while(totalLength < 600) {
         console.log(totalLength + "YIPPEEE")
         numSpaces++;
         totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
     }
-    console.log(totalLength + "YIPPEEE")
-    console.log(totalLength + "WIDTH")
-    console.log(numSpaces + "SAVE NE")
     return numSpaces;
 }
 
+// Turns the type into a number beat
 function typeToNumber(type) {
     // WHEEEE
     let beat = 0;
@@ -980,12 +936,14 @@ function typeToNumber(type) {
         console.log(1 + "wydm");
     }
 
-    console.log(type + "SHORTED");
     return beat;
 }
 
+// Find the multiplier
 function findShortestNote() {
     let shortestBeat = 1000;
+
+    // Find the shortest beat
     for(let i = 0; i < trebleClef.length; i++) {
         for(let j = 0; j < trebleClef[i].notes.length; j++) {
             if(trebleClef[i].notes[j].type == null) {
@@ -996,7 +954,7 @@ function findShortestNote() {
             }
         }
     }
-    console.log(shortestBeat +"SHORTED")
+    // Find the multiplier to make that number whole
     for(let i = 1; i <= 32; i++) {
         if(shortestBeat * i == 1) {
             return i;
@@ -1005,13 +963,6 @@ function findShortestNote() {
     return 16;
 }
 
-function checkLength() {
-    let table = document.getElementById("start1");
-    // console.log(table);
-    // console.log("WIDTH");
-    console.log(table.rows[0].cells[0].rows[0].cells[0] + "WIDTH");
-
-}
 // Class for a measure, stores all the notes in the measure
 class Measure {
     notes = [];
