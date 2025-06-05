@@ -893,19 +893,19 @@ function findLongestMeasure() {
     // Calculate the width of the whole table to see if it fits the printing requirements
     let numSpaces = 1;
     numMeasures = 3;
-    let totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
+    let totalLength = ( (numSpaces * longestMeasure * 5) + longestMeasure * 7 ) * numMeasures;
 
     // If it's too wide initially, it will change the number of measures per row
-    while(totalLength > 620 && numMeasures > 1) {
+    while(totalLength > 600 && numMeasures > 1) {
         numMeasures--;
-        totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
+        totalLength = ( (numSpaces * longestMeasure * 5) + longestMeasure * 7 ) * numMeasures;
     }
 
     // Change the number of spaces to fit it
-    while(totalLength < 600) {
+    while(totalLength < 700) {
         console.log(totalLength + "YIPPEEE")
         numSpaces++;
-        totalLength = ( (numSpaces * longestMeasure * 26.66) + longestMeasure * 10.66 ) * numMeasures;
+        totalLength = ( (numSpaces * longestMeasure * 5) + longestMeasure * 7 ) * numMeasures;
     }
     return numSpaces;
 }
