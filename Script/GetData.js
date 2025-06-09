@@ -54,7 +54,7 @@ export function findLongestMeasure(trebleClef, bassClef) {
         numSpaces++;
         totalLength = ( (numSpaces * longestMeasure * 5) + longestMeasure * 7 ) * numMeasures;
     }
-    return numSpaces;
+    return { measures : numMeasures, spaces: numSpaces }; 
 }
 
 // Turns the type into a number beat

@@ -21,7 +21,7 @@ button.addEventListener('click', function(){
 function createSheetMusic(trebleClef, bassClef) {
     let currentDiv = document.getElementsByClassName("measures")[0];
     let row1 = document.createElement("tr");
-    let amountToAdd = findLongestMeasure(trebleClef, bassClef);
+    let {measures : numMeasures, spaces : amountToAdd } = findLongestMeasure(trebleClef, bassClef);
     // let amountToAdd = 1;
     let measureCount = 0;
     let multiplier = findShortestNote(trebleClef);
