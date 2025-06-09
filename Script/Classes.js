@@ -67,11 +67,6 @@ export class Measure {
     addChord(chord) {
         this.notes.push(chord);
     }
-    removeLast() { // remove this
-        console.log(this.notes);
-        this.notes.pop();
-        console.log(this.notes);
-    }
     getStaff() {
         return staff;
     }

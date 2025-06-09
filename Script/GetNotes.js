@@ -135,7 +135,6 @@ export function getNotes() {
                     measureTrebleData.addChord(chordNotes);
                 }
                 else if(note.staff === "2") {
-                    //console.log(note);
                     measureBassData.addChord(chordNotes);
                 }
             }
@@ -176,7 +175,6 @@ export function getNotes() {
         }
         
     }
-    console.log(trebleClef + "KMS YIPPE")
     return { newTrebleClef: trebleClef, newBassClef: bassClef };
 }
 
