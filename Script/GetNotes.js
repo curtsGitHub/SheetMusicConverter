@@ -1,3 +1,4 @@
+// --- Gets all of the data from the XML file and stores it in arrays or variables --- //
 
 import { Chord, Note, Measure } from "./Classes.js";
 

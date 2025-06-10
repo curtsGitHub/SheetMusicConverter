@@ -1,5 +1,5 @@
-/* --- Main processing page: Reads the file and converts it into an arraylist for easier access,
-Finds the credits to display, manipulates the printing page's table to display the notes --- */
+/* --- Main processing page: Manipulates the printing page's table to display the notes --- */
+
 import { Chord, Note, Measure } from "./Classes.js";
 import { getCredits, getNotes } from "./GetNotes.js";
 import { findLongestMeasure, findShortestNote, typeToNumber } from "./GetData.js";

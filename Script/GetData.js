@@ -1,3 +1,5 @@
+// --- Caluclates all the important number of the program such as the multiplier for tempo, 
+// the number of spaces for proper printing --- //
 
 // Find the proper spacing to consistantly print at good margins and no cutoffs
 export function findLongestMeasure(trebleClef, bassClef) {
@@ -34,8 +36,6 @@ export function findLongestMeasure(trebleClef, bassClef) {
             measureNum = bassClef[i].measureNum;
         }
     }
-    console.log(longestMeasure + " HOW");// delete
-    console.log(measureNum + "HOW");// delete
 
     // Calculate the width of the whole table to see if it fits the printing requirements
     let numSpaces = 1;
@@ -50,7 +50,6 @@ export function findLongestMeasure(trebleClef, bassClef) {
 
     // Change the number of spaces to fit it
     while(totalLength < 700) {
-        console.log(totalLength + "YIPPEEE")
         numSpaces++;
         totalLength = ( (numSpaces * longestMeasure * 5) + longestMeasure * 7 ) * numMeasures;
     }
@@ -80,7 +79,6 @@ export function typeToNumber(type) {
         beat = .03125
     }
     else {
-        console.log(1 + "wydm");
     }
 
     return beat;
