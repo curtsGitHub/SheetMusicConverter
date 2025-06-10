@@ -9,13 +9,13 @@ let trebleClef = [];
 let numMeasures = 3;
 
 // When they click show file run!!
-button.addEventListener('click', function(){
+window.onload = function(){
     getCredits();
     const { newTrebleClef: newtrebleClef, newBassClef: newbassClef } = getNotes();
     trebleClef = newtrebleClef;
     bassClef = newbassClef;
     createSheetMusic(trebleClef, bassClef);
-})
+}
 
 // Creates the html file that will be printed
 function createSheetMusic(trebleClef, bassClef) {
