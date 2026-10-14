@@ -61,7 +61,7 @@ function createSheetMusic(trebleClef, bassClef) {
         note.id = "firstTempo";
         treble.appendChild(note);
         for(let j = 0; j <= 5; j++) {
-            for(let k = 0; k < 7; k++) {
+            for(let k = 7; k >= 0; k--) {
                 note = document.createElement("tr");
                 note.id = "" +  String.fromCharCode((97 + k)) + "" + (8-j);
                 treble.appendChild(note);
