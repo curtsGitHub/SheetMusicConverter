@@ -25,7 +25,8 @@ function createSheetMusic(trebleClef, bassClef) {
     // let amountToAdd = 1;
     let measureCount = 0;
     let multiplier = findShortestNote(trebleClef);
-    
+    console.log(trebleClef);
+    console.log(bassClef);
     // Go through all of the measures in the treble clef
     for(let i = 0; i < trebleClef.length; i++) {
 
@@ -61,9 +62,12 @@ function createSheetMusic(trebleClef, bassClef) {
         note.id = "firstTempo";
         treble.appendChild(note);
         for(let j = 0; j <= 5; j++) {
-            for(let k = 7; k >= 0; k--) {
+            for(let k = 6; k >= 0; k--) {
                 note = document.createElement("tr");
-                note.id = "" +  String.fromCharCode((97 + k)) + "" + (8-j);
+                note.id = "" +  String.fromCharCode((99 + k)) + "" + (8-j); //99
+                if(k > 4) {
+                    note.id = "" +  String.fromCharCode((97 + k - 5)) + "" + (8-j);
+                }
                 treble.appendChild(note);
             }
         }
@@ -262,11 +266,19 @@ function createSheetMusic(trebleClef, bassClef) {
         // Set up the notes for the measure as rows
         let note = document.createElement("tr");
         for(let j = 0; j <= 5; j++) {
-            for(let k = 0; k < 7; k++) {
+            for(let k = 6; k >= 0; k--) {
                 note = document.createElement("tr");
-                note.id = "" +  String.fromCharCode((97 + k)) + "" + (6-j);
+                note.id = "" +  String.fromCharCode((99 + k)) + "" + (6-j);
+                if(k > 4) {
+                    note.id = "" +  String.fromCharCode((97 + k - 5)) + "" + (6-j);
+                }
                 bass.appendChild(note);
             }
+            // for(let k = 0; k < 7; k++) {
+            //     note = document.createElement("tr");
+            //     note.id = "" +  String.fromCharCode((97 + k)) + "" + (6-j);
+            //     bass.appendChild(note);
+            // }
         }
         
         let currentNumNotes = 0;

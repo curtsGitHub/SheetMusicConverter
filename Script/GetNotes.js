@@ -127,6 +127,8 @@ export function getNotes() {
             // Check if it's the second note of the chord
             if(note.chord && firstChord) {
                 chordNotes = new Chord(prevNote, prevNote.staff);
+                chordNotes.addNote(note);
+                addChord = true;
             }
             else if(note.chord) {
                 addChord = false;
@@ -142,7 +144,7 @@ export function getNotes() {
             else {
                 if(note.staff === "1") {
                     atleastTreble = true;
-                    measureBassData.addNote(note);
+                    measureTrebleData.addNote(note);
                 }
                 if(note.staff === "2") {
                     measureBassData.addNote(note);
