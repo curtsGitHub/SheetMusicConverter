@@ -38,10 +38,17 @@ table {
 
 }
 .treble {
-    border-bottom: 1px solid black;
     break-inside: avoid;
     page-break-inside: avoid;
 } 
+[id="measure"] {
+    width: 100%;
+    border-collapse: collapse;
+}
+.gap {
+    border-top: 1px dashed black; /* TODO: change */
+
+}
 @media print {
     body {
       font-size: 10pt;

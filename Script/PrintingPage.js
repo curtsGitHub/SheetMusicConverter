@@ -22,6 +22,7 @@ function createSheetMusic(trebleClef, bassClef) {
     let currentDiv = document.getElementsByClassName("measures")[0];
     let row1 = document.createElement("tr");
     let {measures : numMeasures, spaces : amountToAdd } = findLongestMeasure(trebleClef, bassClef);
+    // console.log(amountToAdd);
     // let amountToAdd = 1;
     let measureCount = 0;
     let multiplier = findShortestNote(trebleClef);
@@ -255,6 +256,9 @@ function createSheetMusic(trebleClef, bassClef) {
     for(let i = 0; i < bassClef.length; i++) {
         // Set up the bass clef in the measure
         let currentDiv = document.getElementsByClassName("measure" + (bassClef[i].measureNum+1));
+        let gap = document.createElement("tr");
+        gap.className = "gap";
+        currentDiv[0].appendChild(gap);
         let row = document.createElement("tr");
         currentDiv[0].appendChild(row);
         let data1 = document.createElement("td");
