@@ -6,7 +6,7 @@ export function findLongestMeasure(trebleClef, bassClef) {
     let longestMeasure = 0;
     let longestCount = 0;
     let measureNum = 0;
-    console.log(trebleClef.length + " like...")
+    // console.log(trebleClef.length + " like...")
     // Find the widest measure and the number of notes in it
     for(let i = 0; i < trebleClef.length; i++) {
         let count = 0;

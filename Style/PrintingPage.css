@@ -1,4 +1,5 @@
 /* Styling for the printing page */
+
 h1 {
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
@@ -21,20 +22,55 @@ table {
 
 .measures {
     border-right: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
 }
 .measures td {
     border-right: 2px solid black;
     border-bottom: 2px solid black;
+    break-inside: avoid;
+    page-break-inside: avoid;
 }
 #measure td {
     border: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
 
 }
 .treble {
     border-bottom: 1px solid black;
+    break-inside: avoid;
+    page-break-inside: avoid;
 } 
 @media print {
     body {
       font-size: 10pt;
     }
   }
+    
+    .measures { border-collapse: collapse; width: 100%; }
+.measures > tbody > tr > td { vertical-align: top; padding: 0 0.6em 1.2em 0; }
+.measure {
+    border-collapse: collapse;
+    table-layout: fixed; /* width is set in JS → equal columns */
+    border-left: 1px solid #000; /* bar line */
+    font: 12pt "Courier New", monospace;
+}
+.measure td {
+    width: 1.1em; /* keep in sync with COL_EM */
+    height: 1.25em;
+    padding: 0;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.measure td.acc { text-align: right; font-size: 0.8em; }
+.measure tr.count td { font-size: 8pt; color: #444; }
+.measure tr.gap td { height: 0.8em; border-top: 1px dashed #bbb; }
+@media print {
+@page { size: letter landscape; margin: 0.5in; }
+button, #help, #helpBox, #addFile, #submit { display: none !important; }
+body { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.measures > tbody > tr, .measure { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, #title, #composer { break-after: avoid; }
+}
