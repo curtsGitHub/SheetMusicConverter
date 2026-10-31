@@ -158,6 +158,7 @@ function createSheetMusic(trebleClef, bassClef) {
                 }
                 // Set up the tempo number
                 let tempo = document.createElement("td");
+                tempo.textContent = beatCount+1;
                 if(trebleClef[i].notes[j].type != null) { // Jump point
                     // Find the type of the beat and convert it into its number form
                     // Then multiply it by a multiplier to end with a whole number
@@ -170,7 +171,6 @@ function createSheetMusic(trebleClef, bassClef) {
                 }
                 
                 // Add the tempo number
-                tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
                 currentNumNotes+=amountToAdd;
             }
@@ -237,13 +237,13 @@ function createSheetMusic(trebleClef, bassClef) {
 
                 // Set up the tempo number
                 let tempo = document.createElement("td");
+                tempo.textContent = beatCount + 1;
                 if(trebleClef[i].notes[j].type != null) { // Jump point
                     beatCount += typeToNumber(trebleClef[i].notes[j].type) * multiplier;
                 }
                 else {
                     beatCount += trebleClef[i].notes[j].duration/trebleClef[i].notes[j].division * multiplier;
                 }
-                tempo.textContent = beatCount;
                 tempoNotes.appendChild(tempo);
                 currentNote.appendChild(newNote);
                 currentNumNotes+=amountToAdd;
