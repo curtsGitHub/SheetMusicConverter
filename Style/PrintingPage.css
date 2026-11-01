@@ -63,7 +63,7 @@ table {
 }
 
 @media print {
-    @page { size: letter landscape; margin: 0.5in; }
+    @page { size: letter portrait; margin: 0.5in; }
     button {
         display: none !important;
     }
